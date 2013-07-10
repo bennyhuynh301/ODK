@@ -243,6 +243,10 @@
             android:name="org.odk.collect.android.tracker.UploadReceiver"
             android:process=":remote" >
         </receiver>
+        <receiver
+            android:name="org.odk.collect.android.tracker.SetTimeTrigger"
+            android:process=":remote" >
+        </receiver>
         <receiver android:name="org.odk.collect.android.tracker.BatteryLevelReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BATTERY_LOW" />

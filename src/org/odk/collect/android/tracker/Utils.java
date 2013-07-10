@@ -21,7 +21,7 @@ public class Utils {
 	public static final int HAS_CONNECTION = 2;
 	
 	static public void retryLater(Context context, Class<?> cls, int sec){
-		Log.i(TAG,"Retry "+ cls.toString());
+		Log.d(TAG,"Retry "+ cls.toString());
 		
 		Calendar todayEnd = Calendar.getInstance();
 		todayEnd.set(Calendar.HOUR_OF_DAY, 22);

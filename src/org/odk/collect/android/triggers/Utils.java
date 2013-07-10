@@ -29,7 +29,7 @@ public class Utils {
 	public static final int HAS_CONNECTION = 2;
 	
 	static public void retryLater(Context context, Class<?> cls, int sec){
-		Log.i(TAG,"Retry "+ cls.toString());
+		Log.d(TAG,"Retry "+ cls.toString());
 		
 		Calendar todayEnd = Calendar.getInstance();
 		todayEnd.set(Calendar.HOUR_OF_DAY, 22);
@@ -71,7 +71,7 @@ public class Utils {
 	//return null if Internet error
 	static public Map <String,List<Calendar>> getTimeTrigger(String user){
 		Map<String,List<Calendar>> triggers = new HashMap<String,List<Calendar>>();
-		Log.i(TAG,"getTimeTrigger for user: "+user);
+		Log.d(TAG,"getTimeTrigger for user: "+user);
 		HttpURLConnection urlConnection = null;
 		try{
 			URL url = new URL("http://23.23.166.34/gettrigger/?u="+user);

@@ -12,7 +12,7 @@ public class SetTimeTrigger extends BroadcastReceiver{
 	@Override
 	public void onReceive(Context context, Intent arg1) {
 		// TODO Auto-generated method stub
-		Log.i(TAG,"SetTimeReceived");
+		Log.d(TAG,"SetTimeReceived");
 		context.startService(new Intent(context,UploadDataService.class));
 	}
 }

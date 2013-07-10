@@ -18,6 +18,10 @@ import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHttpResponse;
 
+import org.odk.collect.android.R;
+
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +31,8 @@ import android.os.Environment;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
+import android.support.v4.app.NotificationCompat;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
@@ -57,6 +63,8 @@ public class UploadDataService extends Service {
 		case Utils.NO_CONNECTION:
 			Log.d(TAG,"UploadDataService NO_CONNECTION");
 			Utils.retryLater(this,SetTimeTrigger.class, 3600);
+			sendWiFiNotification();
+			sendDataPlanNotification();
 			stopSelf();
 			break;
 		case Utils.WAIT_FOR_WIFI:
@@ -73,7 +81,7 @@ public class UploadDataService extends Service {
 			String response = post(user, phoneID);
 			if (response.equals("FAILURE")) {
 				Log.d(TAG, "Upload fails. Retry....");
-				Utils.retryLater(this,SetTimeTrigger.class, 10);
+				Utils.retryLater(this,SetTimeTrigger.class, 300);
 			}
 			else if (response.equals("SUCCESS")) {
 				File logFile = new File(Environment.getExternalStorageDirectory(), FILE_NAME);
@@ -174,11 +182,52 @@ public class UploadDataService extends Service {
 			parameters.setAesKeyStrength(Zip4jConstants.AES_STRENGTH_256);
 			parameters.setPassword("ucberkeley");
 			zipFile.addFile(file, parameters);
+			Log.d(TAG, "Is Encrypted: " + zipFile.isEncrypted());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return path;
 	}
+	
+	private void sendWiFiNotification() {
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(getApplicationContext());
+
+        builder.setContentTitle("ODK Tracker")
+               .setContentText("Please turn on Wifi")
+               .setSmallIcon(R.drawable.notes)
+               .setContentIntent(getContentIntent("WIFI"));
+
+        NotificationManager notifyManager = (NotificationManager)
+                getSystemService(Context.NOTIFICATION_SERVICE);
+        notifyManager.notify(1, builder.build());
+    }
+	
+	private void sendDataPlanNotification() {
+        NotificationCompat.Builder builder =
+                new NotificationCompat.Builder(getApplicationContext());
+
+        builder.setContentTitle("ODK Tracker")
+               .setContentText("Please turn on data plan")
+               .setSmallIcon(R.drawable.notes)
+               .setContentIntent(getContentIntent("DATA_PLAN"));
+
+        NotificationManager notifyManager = (NotificationManager)
+                getSystemService(Context.NOTIFICATION_SERVICE);
+        notifyManager.notify(0, builder.build());
+    }
+	
+    private PendingIntent getContentIntent(String networkType) {
+    	Intent intent = null;
+    	if (networkType.equals("WIFI")) {
+    		intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
+    	}
+    	else {
+    		intent = new Intent(Settings.ACTION_DATA_ROAMING_SETTINGS);
+    	}
+        return PendingIntent.getActivity(getApplicationContext(), 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+    }
 
 	@Override
 	public IBinder onBind(Intent arg0) {
