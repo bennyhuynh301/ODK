@@ -2,6 +2,7 @@ package org.odk.collect.android.tracker;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.util.Date;
 
 import com.google.android.gms.location.LocationClient;
 
@@ -48,6 +49,7 @@ public class LocationUpdateIntentService extends IntentService {
 			out.write(log + "\n");
 			out.close();
 		}catch (Exception e) {
+			Utils.log(new Date(), TAG, e.getMessage());
 			return;
 		}
 	}

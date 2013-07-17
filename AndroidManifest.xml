@@ -40,7 +40,7 @@
 
     <application
         android:name="org.odk.collect.android.application.Collect"
-        android:icon="@drawable/notes"
+        android:icon="@drawable/study_logo"
         android:label="@string/app_name"
         android:theme="@style/Collect" >
         <provider

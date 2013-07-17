@@ -1,5 +1,7 @@
 package org.odk.collect.android.tracker;
 
+import java.util.Date;
+
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
@@ -87,6 +89,7 @@ implements ConnectionCallbacks, OnConnectionFailedListener {
 	@Override
 	public void onConnected(Bundle arg0) {
 		Log.d(ActivityUtils.APPTAG, "Detection client connected");
+		Utils.log(new Date(), ActivityUtils.APPTAG, "Dectection client connected");
 		continueRequestActivityUpdates();
 	}
 
@@ -94,6 +97,7 @@ implements ConnectionCallbacks, OnConnectionFailedListener {
 	@Override
 	public void onDisconnected() {
 		Log.d(ActivityUtils.APPTAG, "Detection client disconnected");
+		Utils.log(new Date(), ActivityUtils.APPTAG, "Detection client disconnected");
 		mActivityRecognitionClient = null;
 	}
 
@@ -116,11 +120,12 @@ implements ConnectionCallbacks, OnConnectionFailedListener {
 				connectionResult.startResolutionForResult((Activity) mContext,
 						ActivityUtils.CONNECTION_FAILURE_RESOLUTION_REQUEST);
 			} catch (SendIntentException e) {
-
+				Utils.log(new Date(), ActivityUtils.APPTAG, e.getMessage());
 			}
 		} 
 		else {
 			Log.d(ActivityUtils.APPTAG, "Connection fails: " + connectionResult.getErrorCode());
+			Utils.log(new Date(), ActivityUtils.APPTAG, "Connection fails: " + connectionResult.getErrorCode());
 		}
 	}
 }

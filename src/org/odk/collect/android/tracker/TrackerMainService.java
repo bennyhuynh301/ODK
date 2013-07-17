@@ -1,6 +1,7 @@
 package org.odk.collect.android.tracker;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -19,6 +20,7 @@ public class TrackerMainService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Log.d(TAG, "Start main service");
+		Utils.log(new Date(), TAG, "Start main service");
 		Intent updateIntent = new Intent(this, UpdateReceiver.class);
 		this.sendBroadcast(updateIntent);
 		return Service.START_STICKY;
@@ -27,6 +29,7 @@ public class TrackerMainService extends Service {
 	@Override
 	public void onCreate() {
 		Log.d(TAG, "Create main service");
+		Utils.log(new Date(), TAG, "Create main service");
 		super.onCreate();
 
 		Calendar onUploadTime = Calendar.getInstance();
@@ -44,6 +47,7 @@ public class TrackerMainService extends Service {
 	@Override
 	public void onDestroy() {
 		Log.d(TAG, "Destroy main service");
+		Utils.log(new Date(), TAG, "Destroy main service");
 		super.onDestroy();
 	}
 	

@@ -1,5 +1,7 @@
 package org.odk.collect.android.tracker;
 
+import java.util.Date;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -17,12 +19,14 @@ public class UpdateReceiver extends BroadcastReceiver {
 		try {
 			if (Utils.servicesConnected(context)) {
 				Log.d(TAG, "Start updating location and activity");
+				Utils.log(new Date(), TAG, "Start updating location and activity");
 				mDetectionRequester.setUpdateTimeInterval(ActivityUtils.DAYTIME_DETECTION_INTERVAL_MILLISECONDS);
 				mDetectionRequester.requestUpdates();
 				mLocationUpdateRequester.setUpdateTimeInterval(LocationUtils.DAYTIME_UPDATE_INTERVAL_IN_MILLISECONDS);
 				mLocationUpdateRequester.requestUpdates();
 			}
 		} catch (Exception e) {
+			Utils.log(new Date(), TAG, e.getMessage());
 			e.printStackTrace();
 		}
 	}

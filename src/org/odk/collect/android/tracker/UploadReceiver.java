@@ -1,5 +1,7 @@
 package org.odk.collect.android.tracker;
 
+import java.util.Date;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +13,9 @@ public class UploadReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		Log.d(TAG, "UploadReceiver starts");
+		Utils.log(new Date(), TAG, "UploadReceiver starts");
+
 		DetectionRequester mDetectionRequester = DetectionRequester.getInstance();
 		mDetectionRequester.setContext(context);
 		LocationUpdateRequester mLocationUpdateRequester = LocationUpdateRequester.getInstance();
@@ -23,6 +28,7 @@ public class UploadReceiver extends BroadcastReceiver {
 		Bundle b = intent.getExtras();
 		if (b != null && b.getString("RESP").equals("UPLOAD")) {
 			Log.d(TAG, b.getString("RESP"));
+			Utils.log(new Date(), TAG, b.getString("RESP"));
 			try {
 				if (Utils.servicesConnected(context)) {
 					Log.d(TAG, "Start uploading the logfile");
@@ -35,12 +41,14 @@ public class UploadReceiver extends BroadcastReceiver {
 					context.startService(new Intent(context, UploadDataService.class));
 				}
 			} catch (Exception e) {
+				Utils.log(new Date(), TAG, e.getMessage());
 				e.printStackTrace();
 			}
 		}
 
 		else if (b != null && b.getString("RESP").equals("SUCCESS")) {
 			Log.d(TAG, b.getString("RESP"));
+			Utils.log(new Date(), TAG, b.getString("RESP"));
 //			Intent updateIntent = new Intent(context, UpdateReceiver.class);
 //			context.sendBroadcast(updateIntent);
 		}

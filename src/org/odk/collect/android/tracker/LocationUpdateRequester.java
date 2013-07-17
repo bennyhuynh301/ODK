@@ -1,5 +1,7 @@
 package org.odk.collect.android.tracker;
 
+import java.util.Date;
+
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -125,10 +127,13 @@ public class LocationUpdateRequester implements ConnectionCallbacks, OnConnectio
             try {
                 connectionResult.startResolutionForResult((Activity) mContext,
                     LocationUtils.CONNECTION_FAILURE_RESOLUTION_REQUEST);
-            } catch (SendIntentException e) {}
+            } catch (SendIntentException e) {
+				Utils.log(new Date(), LocationUtils.APPTAG, e.getMessage());
+            }
         } 
 		else {
 			Log.d(LocationUtils.APPTAG, "Connection fails: " + connectionResult.getErrorCode());
+			Utils.log(new Date(), LocationUtils.APPTAG, "Connection fails: " + connectionResult.getErrorCode());
         }
     }
 }

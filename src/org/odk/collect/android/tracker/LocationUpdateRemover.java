@@ -1,5 +1,7 @@
 package org.odk.collect.android.tracker;
 
+import java.util.Date;
+
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -62,7 +64,8 @@ public class LocationUpdateRemover  implements ConnectionCallbacks, OnConnection
 
 	@Override
 	public void onConnected(Bundle connectionData) {
-		Log.d(ActivityUtils.APPTAG, "Dectection client connected");
+		Log.d(LocationUtils.APPTAG, "Location client connected");
+		Utils.log(new Date(), LocationUtils.APPTAG, "Location client connected");
 		continueRemoveUpdates();
 	}
 
@@ -74,7 +77,8 @@ public class LocationUpdateRemover  implements ConnectionCallbacks, OnConnection
 
 	@Override
 	public void onDisconnected() {
-		Log.d(ActivityUtils.APPTAG, "Dectection client disconnected");
+		Log.d(LocationUtils.APPTAG, "Location client disconnected");
+		Utils.log(new Date(), LocationUtils.APPTAG, "Location client disconnected");
 		mLocationClient = null;
 	}
 
@@ -85,11 +89,12 @@ public class LocationUpdateRemover  implements ConnectionCallbacks, OnConnection
 				connectionResult.startResolutionForResult((Activity) mContext,
 						ActivityUtils.CONNECTION_FAILURE_RESOLUTION_REQUEST);
 			} catch (SendIntentException e) {
-
+				Utils.log(new Date(), LocationUtils.APPTAG, e.getMessage());
 			}
 		} 
 		else {
-			Log.d(ActivityUtils.APPTAG, "Connection fails: " + connectionResult.getErrorCode());
+			Log.d(LocationUtils.APPTAG, "Connection fails: " + connectionResult.getErrorCode());
+			Utils.log(new Date(), LocationUtils.APPTAG, "Connection fails: " + connectionResult.getErrorCode());
 		}   
 	}
 }

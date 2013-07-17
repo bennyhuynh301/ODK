@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Date;
 
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.model.ZipParameters;
@@ -45,7 +46,8 @@ public class UploadDataService extends Service {
 
 	@Override
 	public void onCreate(){
-		Log.i(TAG,"UploadDataService creates");
+		Log.d(TAG,"UploadDataService creates");
+		Utils.log(new Date(), TAG, "UploadDataService creates");
 		super.onCreate();
 
 		PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -62,6 +64,7 @@ public class UploadDataService extends Service {
 		switch (Utils.networkState(this)){
 		case Utils.NO_CONNECTION:
 			Log.d(TAG,"UploadDataService NO_CONNECTION");
+			Utils.log(new Date(), TAG, "UploadDataService NO_CONNECTION");
 			Utils.retryLater(this,SetTimeTrigger.class, 3600);
 			sendWiFiNotification();
 			sendDataPlanNotification();
@@ -69,24 +72,29 @@ public class UploadDataService extends Service {
 			break;
 		case Utils.WAIT_FOR_WIFI:
 			Log.d(TAG, "UploadDataService WAIT_FOR_WIFI");
+			Utils.log(new Date(), TAG, "UploadDataService WAIT_FOR_WIFI");
 			Utils.retryLater(this,SetTimeTrigger.class, 10);
 			break;
 		case Utils.HAS_CONNECTION:
 			Log.d(TAG, "UploadDataService HAS_CONNECTION");
+			Utils.log(new Date(), TAG, "UploadDataService HAS_CONNECTION");
 			SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 			String user = mSharedPreferences.getString("username","user");
 			TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 			String phoneID = telephonyManager.getDeviceId();
 			Log.d(TAG, "User/PhoneId: " + user + "/" + phoneID);
+			Utils.log(new Date(), TAG, "User/PhoneId: " + user + "/" + phoneID);
 			String response = post(user, phoneID);
 			if (response.equals("FAILURE")) {
 				Log.d(TAG, "Upload fails. Retry....");
+				Utils.log(new Date(), TAG, "Upload fails. Retry....");
 				Utils.retryLater(this,SetTimeTrigger.class, 300);
 			}
 			else if (response.equals("SUCCESS")) {
 				File logFile = new File(Environment.getExternalStorageDirectory(), FILE_NAME);
 				logFile.delete();
 				Log.d(TAG, "Upload success");
+				Utils.log(new Date(), TAG, "Upload success");
 				Intent respIntent = new Intent(this, UploadReceiver.class);
 				respIntent.putExtra("RESP", response);
 				this.sendBroadcast(respIntent);
@@ -113,13 +121,17 @@ public class UploadDataService extends Service {
 				String fileContent = UploadDataService.readFile(logFile);
 				int fileLength = fileContent.length();
 				Log.d(TAG, "File length: " + fileLength);
+				Utils.log(new Date(), TAG, "File length: " + fileLength);
 				multEntity.addPart("user", new StringBody(user));
 				multEntity.addPart("phone_id", new StringBody(phoneID));
 				multEntity.addPart("file", new FileBody(logFile, "application/zip"));
 				httpPost.setEntity(multEntity);
 				httpResponse = (BasicHttpResponse) httpClient.execute(httpPost);
-				Log.d(TAG, "executing httpPost");
+				Log.d(TAG, "Executing httpPost");
+				Utils.log(new Date(), TAG, "Executing httpPost");
 				Log.d(TAG, httpResponse.getStatusLine().toString()+", "+
+						httpResponse.getProtocolVersion().toString());
+				Utils.log(new Date(), TAG, httpResponse.getStatusLine().toString()+", "+
 						httpResponse.getProtocolVersion().toString());
 
 				if (httpResponse.getStatusLine().getStatusCode() == 200) {
@@ -132,6 +144,7 @@ public class UploadDataService extends Service {
 				}
 			}
 		} catch (Exception e) {
+			Utils.log(new Date(), TAG, e.getMessage());
 			e.printStackTrace();
 		}
 		return "UNKNOWN";
@@ -145,9 +158,11 @@ public class UploadDataService extends Service {
 			ret = read(in);
 			in.close();
 		} catch (FileNotFoundException e) {
+			Utils.log(new Date(), TAG, e.getMessage());
 			e.printStackTrace();
 			return null;
 		} catch (IOException e) {
+			Utils.log(new Date(), TAG, e.getMessage());
 			e.printStackTrace();
 		}
 		return ret;
@@ -165,6 +180,7 @@ public class UploadDataService extends Service {
 			buffer.flush();
 			content = new String(buffer.toByteArray());
 		} catch (IOException e) {
+			Utils.log(new Date(), TAG, e.getMessage());
 			e.printStackTrace();
 		}
 		return content;
@@ -183,7 +199,9 @@ public class UploadDataService extends Service {
 			parameters.setPassword("ucberkeley");
 			zipFile.addFile(file, parameters);
 			Log.d(TAG, "Is Encrypted: " + zipFile.isEncrypted());
+			Utils.log(new Date(), TAG, "Is Encrypted: " + zipFile.isEncrypted());
 		} catch (Exception e) {
+			Utils.log(new Date(), TAG, e.getMessage());
 			e.printStackTrace();
 		}
 		return path;
@@ -195,7 +213,7 @@ public class UploadDataService extends Service {
 
         builder.setContentTitle("ODK Tracker")
                .setContentText("Please turn on Wifi")
-               .setSmallIcon(R.drawable.notes)
+               .setSmallIcon(R.drawable.study_logo)
                .setContentIntent(getContentIntent("WIFI"));
 
         NotificationManager notifyManager = (NotificationManager)
@@ -209,7 +227,7 @@ public class UploadDataService extends Service {
 
         builder.setContentTitle("ODK Tracker")
                .setContentText("Please turn on data plan")
-               .setSmallIcon(R.drawable.notes)
+               .setSmallIcon(R.drawable.study_logo)
                .setContentIntent(getContentIntent("DATA_PLAN"));
 
         NotificationManager notifyManager = (NotificationManager)
