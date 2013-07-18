@@ -23,6 +23,7 @@ import android.net.wifi.WifiManager;
 import android.util.Log;
 
 public class Utils {
+	public static final String EC2_URL="http://23.23.166.34/"; // must have the slash at the end
 	public static final String TAG = "Utils";
 	public static final int NO_CONNECTION = 0;
 	public static final int WAIT_FOR_WIFI = 1;
@@ -74,7 +75,7 @@ public class Utils {
 		Log.d(TAG,"getTimeTrigger for user: "+user);
 		HttpURLConnection urlConnection = null;
 		try{
-			URL url = new URL("http://23.23.166.34/gettrigger/?u="+user);
+			URL url = new URL(EC2_URL+"gettrigger/?u="+user);
 			urlConnection = (HttpURLConnection) url.openConnection();
 			urlConnection.setConnectTimeout(4000);
 			urlConnection.setReadTimeout(4000);
