@@ -39,7 +39,7 @@ import android.util.Log;
 
 public class UploadDataService extends Service {
 	private static final String TAG = "UploadDataService";
-	private static final String SERVER_URI = "http://50.16.218.67/trace/";
+	private static final String SERVER_URI = "http://184.169.166.200:61245/api/traces";
 	private static final String FILE_NAME = "tracker.txt";
 	private PowerManager.WakeLock wakeLock;
 	private WifiManager.WifiLock wifiLock;
@@ -88,7 +88,7 @@ public class UploadDataService extends Service {
 			if (response.equals("FAILURE")) {
 				Log.d(TAG, "Upload fails. Retry....");
 				Utils.log(new Date(), TAG, "Upload fails. Retry....");
-				Utils.retryLater(this,SetTimeTrigger.class, 300);
+				Utils.retryLater(this,SetTimeTrigger.class, 3600);
 			}
 			else if (response.equals("SUCCESS")) {
 				File logFile = new File(Environment.getExternalStorageDirectory(), FILE_NAME);
@@ -115,25 +115,31 @@ public class UploadDataService extends Service {
 			MultipartEntity multEntity = new MultipartEntity();
 			BasicHttpResponse httpResponse = null;
 			File logFile = new File(Environment.getExternalStorageDirectory(), FILE_NAME);
-			String zipPath = zipFile(logFile);
-			Log.d(TAG, "Zip File:" + zipPath);
 			if (logFile.exists()) {
 				String fileContent = UploadDataService.readFile(logFile);
 				int fileLength = fileContent.length();
 				Log.d(TAG, "File length: " + fileLength);
 				Utils.log(new Date(), TAG, "File length: " + fileLength);
+				
+				String zipPath = zipFile(logFile);
+				Log.d(TAG, "Zip File:" + zipPath);
+				Utils.log(new Date(), TAG, "Zip File:" + zipPath);
+				File zipFile = new File(zipPath);
+				
 				multEntity.addPart("user", new StringBody(user));
 				multEntity.addPart("phone_id", new StringBody(phoneID));
-				multEntity.addPart("file", new FileBody(logFile, "application/zip"));
+				multEntity.addPart("file", new FileBody(zipFile, "application/zip"));
 				httpPost.setEntity(multEntity);
-				httpResponse = (BasicHttpResponse) httpClient.execute(httpPost);
 				Log.d(TAG, "Executing httpPost");
 				Utils.log(new Date(), TAG, "Executing httpPost");
+				httpResponse = (BasicHttpResponse) httpClient.execute(httpPost);
 				Log.d(TAG, httpResponse.getStatusLine().toString()+", "+
 						httpResponse.getProtocolVersion().toString());
 				Utils.log(new Date(), TAG, httpResponse.getStatusLine().toString()+", "+
 						httpResponse.getProtocolVersion().toString());
-
+				//boolean isDeleted = zipFile.delete();
+				//Log.d(TAG, "Zipfile is deleted:" + isDeleted);
+				//Utils.log(new Date(), TAG, "Zipfile is deleted:" + isDeleted);
 				if (httpResponse.getStatusLine().getStatusCode() == 200) {
 					// TODO SUCCESS
 					return "SUCCESS";
@@ -194,8 +200,8 @@ public class UploadDataService extends Service {
 			parameters.setCompressionMethod(Zip4jConstants.COMP_DEFLATE);
 			parameters.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_NORMAL); 
 			parameters.setEncryptFiles(true);
-			parameters.setEncryptionMethod(Zip4jConstants.ENC_METHOD_AES);
-			parameters.setAesKeyStrength(Zip4jConstants.AES_STRENGTH_256);
+			parameters.setEncryptionMethod(Zip4jConstants.ENC_METHOD_STANDARD);
+			parameters.setAesKeyStrength(Zip4jConstants.AES_STRENGTH_128);
 			parameters.setPassword("ucberkeley");
 			zipFile.addFile(file, parameters);
 			Log.d(TAG, "Is Encrypted: " + zipFile.isEncrypted());
