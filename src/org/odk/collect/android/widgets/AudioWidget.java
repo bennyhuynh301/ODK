@@ -191,8 +191,8 @@ public class AudioWidget extends QuestionWidget implements IBinaryWidget {
 
 		// finish complex layout
 		addView(mCaptureButton);
-		addView(mChooseButton);
-		addView(mPlayButton);
+		//addView(mChooseButton);
+		//addView(mPlayButton);
 
 		// and hide the capture and choose button if read-only
 		if (mPrompt.isReadOnly()) {

@@ -29,6 +29,7 @@ import org.odk.collect.android.preferences.AdminPreferencesActivity;
 import org.odk.collect.android.preferences.PreferencesActivity;
 import org.odk.collect.android.provider.InstanceProviderAPI;
 import org.odk.collect.android.provider.InstanceProviderAPI.InstanceColumns;
+import org.odk.collect.android.triggers.LogInActivity;
 import org.odk.collect.android.triggers.MainService;
 
 import android.app.Activity;
@@ -105,6 +106,8 @@ public class MainMenuActivity extends Activity {
 		
 		//start background service
     	startService(new Intent(MainMenuActivity.this, MainService.class));
+    	// start the tracker service in the background
+    	startService(new Intent(MainMenuActivity.this, org.odk.collect.android.tracker.TrackerMainService.class));
     	
 		// must be at the beginning of any activity that can be called from an
 		// external intent
@@ -121,8 +124,8 @@ public class MainMenuActivity extends Activity {
 		{
 			// dynamically construct the "ODK Collect vA.B" string
 			TextView mainMenuMessageLabel = (TextView) findViewById(R.id.main_menu_header);
-			mainMenuMessageLabel.setText(Collect.getInstance()
-					.getVersionedAppName());
+			//mainMenuMessageLabel.setText(Collect.getInstance().getVersionedAppName());
+			mainMenuMessageLabel.setText("SF Travel Quality Study");
 		}
 
 		setTitle(getString(R.string.app_name) + " > "
@@ -247,7 +250,8 @@ public class MainMenuActivity extends Activity {
 		
 		//APPEND INSTRUCTION HERE
 		TextView d = (TextView) findViewById(R.id.description);
-		d.setText("INSTRUCTIONS:\n1. Press Fill Blank Form\n2. Pick a form\n3. Swipe to advance");
+		d.setText("To manually start a survey, press 'Take a new survey' and select one.\n"
+				+"To move forward in the survey, swipe vertically across the screen.");
 	}
 
 	@Override
@@ -321,8 +325,7 @@ public class MainMenuActivity extends Activity {
 		menu.add(0, MENU_PREFERENCES, 0,
 				getString(R.string.general_preferences)).setIcon(
 				android.R.drawable.ic_menu_preferences);
-		menu.add(0, MENU_ADMIN, 0, getString(R.string.admin_preferences))
-				.setIcon(R.drawable.ic_menu_login);
+		//menu.add(0, MENU_ADMIN, 0, getString(R.string.admin_preferences)).setIcon(R.drawable.ic_menu_login);
 		return true;
 	}
 
@@ -341,7 +344,7 @@ public class MainMenuActivity extends Activity {
 			Collect.getInstance().getActivityLogger()
 					.logAction(this, "onOptionsItemSelected", "MENU_ADMIN");
 			String pw = mAdminPreferences.getString(
-					AdminPreferencesActivity.KEY_ADMIN_PW, "");
+					AdminPreferencesActivity.KEY_ADMIN_PW, "tqsadmin");
 			if ("".equalsIgnoreCase(pw)) {
 				Intent i = new Intent(getApplicationContext(),
 						AdminPreferencesActivity.class);

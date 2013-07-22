@@ -26,14 +26,14 @@ public class ExecuteTimeTrigger extends BroadcastReceiver {
 		NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
 		
 		int icon = R.drawable.notes;
-		CharSequence tickerText = "A Friendly Reminder from QT";
+		CharSequence tickerText = "A friendly survey reminder";
 		long when = System.currentTimeMillis();
 		
 		Notification notification = new Notification(icon, tickerText, when);
 		notification.flags = Notification.FLAG_AUTO_CANCEL;
 		notification.defaults = Notification.DEFAULT_SOUND|Notification.DEFAULT_VIBRATE;
 		
-		CharSequence contentTitle = "A Friendly Reminder from QT";
+		CharSequence contentTitle = "A friendly survey reminder";
 		String form = intent.getExtras().getString("form");
 		CharSequence contentText = "Please fill out form: "+form;
 			

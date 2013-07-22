@@ -16,7 +16,7 @@
 
     <org.odk.collect.android.preferences.PasswordDialogPreference
         android:id="@+id/admin_pw"
-        android:defaultValue=""
+        android:defaultValue="tqsadmin"
         android:dialogTitle="Change Admin Password"
         android:key="admin_pw"
         android:title="Admin Password" />
@@ -50,19 +50,19 @@
     <PreferenceCategory android:title="@string/user_access_preferences" >
         <CheckBoxPreference
             android:id="@+id/change_url"
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="change_url"
             android:summary="@string/found_in_settings"
             android:title="@string/change_url_default" />
         <CheckBoxPreference
             android:id="@+id/change_username"
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="change_username"
             android:summary="@string/found_in_settings"
             android:title="@string/change_username_default" />
         <CheckBoxPreference
             android:id="@+id/change_password"
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="change_password"
             android:summary="@string/found_in_settings"
             android:title="@string/password" />
@@ -74,19 +74,19 @@
             android:title="@string/selected_google_account_text" />
         <CheckBoxPreference
             android:id="@+id/change_server"
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="change_server"
             android:summary="@string/found_in_settings"
             android:title="@string/change_server" />
         <CheckBoxPreference
             android:id="@+id/autosend_wifi"
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="autosend_wifi"
             android:summary="@string/found_in_settings"
             android:title="@string/autosend_wifi" />
         <CheckBoxPreference
             android:id="@+id/autosend_network"
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="autosend_network"
             android:summary="@string/found_in_settings"
             android:title="@string/autosend_network" />

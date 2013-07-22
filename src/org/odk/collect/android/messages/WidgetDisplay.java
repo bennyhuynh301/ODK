@@ -53,7 +53,7 @@ public class WidgetDisplay extends AppWidgetProvider {
         String user = mSharedPreferences.getString("username","user");
         HttpURLConnection urlConnection = null;
         try{
-            URL url = new URL(Utils.EC2_URL+"getmessages/?u="+user);
+            URL url = new URL(Utils.EC2_URL+"api/widget?u="+user);
             urlConnection = (HttpURLConnection) url.openConnection();
             String line;
             StringBuilder builder = new StringBuilder();

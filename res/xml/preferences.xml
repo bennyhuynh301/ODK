@@ -7,7 +7,7 @@
         android:title="@string/app_name" >
         <intent
             android:action="android.intent.action.VIEW"
-            android:data="http://opendatakit.org" />
+            android:data="http://xmobile.berkeley.edu" />
     </PreferenceScreen>
 
     <PreferenceCategory
@@ -102,7 +102,7 @@
             android:title="@string/navigation" />
         <ListPreference
             android:id="@+id/font_size"
-            android:defaultValue="21"
+            android:defaultValue="17"
             android:dialogTitle="@string/change_font_size"
             android:entries="@array/font_size_entries"
             android:entryValues="@array/font_size_entry_values"

@@ -110,27 +110,27 @@ public class PreferencesActivity extends PreferenceActivity implements
 		// not super safe, but we're just putting in this mode to help
 		// administrate
 		// would require code to access it
-		boolean adminMode = getIntent().getBooleanExtra("adminMode", false);
+		boolean adminMode = getIntent().getBooleanExtra("adminMode", true);
 
 		SharedPreferences adminPreferences = getSharedPreferences(
 				AdminPreferencesActivity.ADMIN_PREFERENCES, 0);
 
 		boolean serverAvailable = adminPreferences.getBoolean(
-				AdminPreferencesActivity.KEY_CHANGE_SERVER, true);
+				AdminPreferencesActivity.KEY_CHANGE_SERVER, false);
 		boolean urlAvailable = adminPreferences.getBoolean(
-				AdminPreferencesActivity.KEY_CHANGE_URL, true);
+				AdminPreferencesActivity.KEY_CHANGE_URL, false);
 
 		PreferenceCategory autosendCategory = (PreferenceCategory) findPreference(getString(R.string.autosend));
 		mAutosendWifiPreference = (CheckBoxPreference) findPreference(KEY_AUTOSEND_WIFI);
 		boolean autosendWifiAvailable = adminPreferences.getBoolean(
-				AdminPreferencesActivity.KEY_AUTOSEND_WIFI, true);
+				AdminPreferencesActivity.KEY_AUTOSEND_WIFI, false);
 		if (!(autosendWifiAvailable || adminMode)) {
 			autosendCategory.removePreference(mAutosendWifiPreference);
 		}
 
 		mAutosendNetworkPreference = (CheckBoxPreference) findPreference(KEY_AUTOSEND_NETWORK);
 		boolean autosendNetworkAvailable = adminPreferences.getBoolean(
-				AdminPreferencesActivity.KEY_AUTOSEND_NETWORK, true);
+				AdminPreferencesActivity.KEY_AUTOSEND_NETWORK, false);
 		if (!(autosendNetworkAvailable || adminMode)) {
 			autosendCategory.removePreference(mAutosendNetworkPreference);
 		}
@@ -140,7 +140,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 		}
 
 		PreferenceCategory serverCategory = (PreferenceCategory) findPreference(getString(R.string.server_preferences));
-
+		
 		// declared early to prevent NPE in toggleServerPaths
 		mFormListUrlPreference = (EditTextPreference) findPreference(KEY_FORMLIST_URL);
 		mSubmissionUrlPreference = (EditTextPreference) findPreference(KEY_SUBMISSION_URL);
@@ -327,6 +327,10 @@ public class PreferencesActivity extends PreferenceActivity implements
 				|| googleAccountAvailable || adminMode)) {
 			getPreferenceScreen().removePreference(serverCategory);
 		}
+		
+		//Hoang remove server and autosend category
+		getPreferenceScreen().removePreference(autosendCategory);
+		getPreferenceScreen().removePreference(serverCategory);
 
 		PreferenceCategory clientCategory = (PreferenceCategory) findPreference(getString(R.string.client));
 

@@ -34,7 +34,7 @@ public class LogInActivity extends Activity implements OnClickListener {
 	private Button btnLogin;
 	private TextView lblResult;
 	private String username;
-	private String password;
+	private String password = "none";
 	private Activity activity;
 	private Context context;
 	private ProgressDialog dialog;
@@ -43,9 +43,6 @@ public class LogInActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		
-		// start the tracker service in the background
-		startService(new Intent(LogInActivity.this, org.odk.collect.android.tracker.TrackerMainService.class));
 		
 		activity = LogInActivity.this;
 		context = getApplicationContext();
@@ -56,11 +53,11 @@ public class LogInActivity extends Activity implements OnClickListener {
 		//ready dialog
 		dialog = new ProgressDialog(activity);
 		dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-		dialog.setMessage("Connecting to QT server...");
+		dialog.setMessage("Connecting to server...");
 		
 		// Get the EditText and Button References
 		etUsername = (EditText)findViewById(R.id.username);
-		etPassword = (EditText)findViewById(R.id.password);
+		//etPassword = (EditText)findViewById(R.id.password);
 		btnLogin = (Button)findViewById(R.id.login_button);
 		lblResult = (TextView)findViewById(R.id.result);
 		
@@ -72,7 +69,8 @@ public class LogInActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		if (v == findViewById(R.id.login_button)) {
 			username = this.etUsername.getText().toString().trim();
-			password = this.etPassword.getText().toString().trim();
+			//password = this.etPassword.getText().toString().trim();
+			password = "pw";
 			
 			if(username.equalsIgnoreCase("") || password.equalsIgnoreCase("")) {
 				this.lblResult.setText("Please provide a username and password");
@@ -103,7 +101,7 @@ public class LogInActivity extends Activity implements OnClickListener {
 			        Editor editor = mSharedPreferences.edit();
 			        editor.putBoolean("IS_LOGGED_IN", true);
 			        editor.putString("username", username);
-			        editor.putString("password", password);
+			        //editor.putString("password", password);
 					editor.commit();
 					
 					//start new main activity
@@ -143,7 +141,7 @@ public class LogInActivity extends Activity implements OnClickListener {
 			}
 			HttpURLConnection urlConnection = null;
 			try {
-				URL url = new URL(Utils.EC2_URL+"checkuser/?u="+user+"&p="+pass);
+				URL url = new URL(Utils.EC2_URL+"api/user?u="+user);
 				urlConnection = (HttpURLConnection) url.openConnection();
 				urlConnection.setConnectTimeout(5000);
 				urlConnection.setReadTimeout(5000);
