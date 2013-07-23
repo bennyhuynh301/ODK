@@ -25,7 +25,7 @@ public class ExecuteTimeTrigger extends BroadcastReceiver {
 		// TODO Auto-generated method stub
 		NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
 		
-		int icon = R.drawable.notes;
+		int icon = R.drawable.study_logo;
 		CharSequence tickerText = "A friendly survey reminder";
 		long when = System.currentTimeMillis();
 		
@@ -35,7 +35,7 @@ public class ExecuteTimeTrigger extends BroadcastReceiver {
 		
 		CharSequence contentTitle = "A friendly survey reminder";
 		String form = intent.getExtras().getString("form");
-		CharSequence contentText = "Please fill out form: "+form;
+		CharSequence contentText = "Please fill out survey: "+form;
 			
 		Intent notificationIntent = getFormEntryIntent(context,form);
 		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_ONE_SHOT);

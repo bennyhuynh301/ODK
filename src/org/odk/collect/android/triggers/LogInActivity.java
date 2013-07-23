@@ -73,7 +73,7 @@ public class LogInActivity extends Activity implements OnClickListener {
 			password = "pw";
 			
 			if(username.equalsIgnoreCase("") || password.equalsIgnoreCase("")) {
-				this.lblResult.setText("Please provide a username and password");
+				this.lblResult.setText("Please provide your username.");
 			} else {
 				new Login().execute();
 			}	
@@ -114,7 +114,7 @@ public class LogInActivity extends Activity implements OnClickListener {
 		    		intentUpdateUser.putExtra("username", username);
 		    		sendBroadcast(intentUpdateUser);
 				} else {
-					message = "Please enter a valid username and password";
+					message = "Sorry, this username is unknown!";
 				}
 			} catch (Exception e) {
 				Log.e(TAG, e.toString());

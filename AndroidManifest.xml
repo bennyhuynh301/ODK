@@ -149,7 +149,7 @@
         <!-- Enable Shortcuts for Command Actions -->
         <activity
             android:name=".activities.AndroidShortcuts"
-            android:label="Travel Quality Survey"
+            android:label="Travel Quality Study survey"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
