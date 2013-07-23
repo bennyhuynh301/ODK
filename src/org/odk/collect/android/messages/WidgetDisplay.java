@@ -1,6 +1,7 @@
 package org.odk.collect.android.messages;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -9,6 +10,8 @@ import java.util.TimerTask;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.odk.collect.android.R;
 import org.odk.collect.android.triggers.Utils;
@@ -54,6 +57,7 @@ public class WidgetDisplay extends AppWidgetProvider {
         HttpURLConnection urlConnection = null;
         try{
             URL url = new URL(Utils.EC2_URL+"api/widget?u="+user);
+            
             urlConnection = (HttpURLConnection) url.openConnection();
             String line;
             StringBuilder builder = new StringBuilder();
@@ -61,16 +65,21 @@ public class WidgetDisplay extends AppWidgetProvider {
             while((line = reader.readLine()) != null) {
                 builder.append(line);
             }
-            JSONObject json = new JSONObject(builder.toString());
-            String error = json.optString("ERROR");
-            if ((error == null)||(error.length()==0))
-                response = json.optString("LINE1")+"\n"
-                        +json.optString("LINE2")+"\n"
-                        +json.optString("LINE3")+"\n"
-                        +json.optString("LINE4");
-            else
-                response = error;
-        } catch (Exception e) {
+            JSONObject json;
+			try {
+				json = new JSONObject(builder.toString());
+				String error = json.optString("ERROR");
+	            if ((error == null)||(error.length()==0))
+	                response = json.optString("LINE1")+"\n"
+	                        +json.optString("LINE2")+"\n"
+	                        +json.optString("LINE3")+"\n"
+	                        +json.optString("LINE4");
+	            else
+	                response = error;
+			} catch (JSONException e) {
+				 response = "Server Error";
+			}
+        } catch (IOException e) {
             response = "Please check your internet connection";
         }
         finally {
