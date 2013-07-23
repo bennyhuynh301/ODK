@@ -28,6 +28,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.wifi.WifiManager;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.IBinder;
 import android.os.PowerManager;
@@ -78,27 +79,7 @@ public class UploadDataService extends Service {
 		case Utils.HAS_CONNECTION:
 			Log.d(TAG, "UploadDataService HAS_CONNECTION");
 			Utils.log(new Date(), TAG, "UploadDataService HAS_CONNECTION");
-			SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-			String user = mSharedPreferences.getString("username","user");
-			TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-			String phoneID = telephonyManager.getDeviceId();
-			Log.d(TAG, "User/PhoneId: " + user + "/" + phoneID);
-			Utils.log(new Date(), TAG, "User/PhoneId: " + user + "/" + phoneID);
-			String response = post(user, phoneID);
-			if (response.equals("FAILURE")) {
-				Log.d(TAG, "Upload fails. Retry....");
-				Utils.log(new Date(), TAG, "Upload fails. Retry....");
-				Utils.retryLater(this,SetTimeTrigger.class, 3600);
-			}
-			else if (response.equals("SUCCESS")) {
-				File logFile = new File(Environment.getExternalStorageDirectory(), FILE_NAME);
-				logFile.delete();
-				Log.d(TAG, "Upload success");
-				Utils.log(new Date(), TAG, "Upload success");
-				Intent respIntent = new Intent(this, UploadReceiver.class);
-				respIntent.putExtra("RESP", response);
-				this.sendBroadcast(respIntent);
-			}
+			new Upload().execute();
 			stopSelf();
 			break;
 		default:
@@ -108,6 +89,37 @@ public class UploadDataService extends Service {
 		return START_STICKY;
 	}
 
+	private class Upload extends AsyncTask<Void, Void, Void> {
+
+		@Override
+		protected Void doInBackground(Void... arg0) {
+			// TODO Auto-generated method stub
+			Context context = getApplicationContext();
+			SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+			String user = mSharedPreferences.getString("username","user");
+			TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+			String phoneID = telephonyManager.getDeviceId();
+			Log.d(TAG, "User/PhoneId: " + user + "/" + phoneID);
+			Utils.log(new Date(), TAG, "User/PhoneId: " + user + "/" + phoneID);
+			String response = post(user, phoneID);
+			if (response.equals("FAILURE")) {
+				Log.d(TAG, "Upload fails. Retry....");
+				Utils.log(new Date(), TAG, "Upload fails. Retry....");
+				Utils.retryLater(context,SetTimeTrigger.class, 3600);
+			}
+			else if (response.equals("SUCCESS")) {
+				File logFile = new File(Environment.getExternalStorageDirectory(), FILE_NAME);
+				logFile.delete();
+				Log.d(TAG, "Upload success");
+				Utils.log(new Date(), TAG, "Upload success");
+				Intent respIntent = new Intent(context, UploadReceiver.class);
+				respIntent.putExtra("RESP", response);
+				context.sendBroadcast(respIntent);
+			}
+			return null;
+		}	
+	}
+	
 	private String post(String user, String phoneID) {
 		try {
 			HttpClient httpClient = new DefaultHttpClient();
