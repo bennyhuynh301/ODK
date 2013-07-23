@@ -80,7 +80,7 @@ public class WidgetDisplay extends AppWidgetProvider {
 				 response = "Server Error";
 			}
         } catch (IOException e) {
-            response = "Please check your internet connection";
+            response = "Couldn't connect to the server.";
         }
         finally {
             urlConnection.disconnect();
