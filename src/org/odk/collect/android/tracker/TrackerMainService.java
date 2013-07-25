@@ -36,6 +36,8 @@ public class TrackerMainService extends Service {
 		onUploadTime.set(Calendar.HOUR_OF_DAY, 0);
 		onUploadTime.set(Calendar.MINUTE, randomMin);
 		onUploadTime.set(Calendar.SECOND, randomSecond);
+		Log.d(TAG, "Upload Time: " + onUploadTime.getTime());
+		Utils.log(new Date(), TAG, "Upload Time: " + onUploadTime.getTime());
 		
 		AlarmManager am = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
 		Intent uploadIntent = new Intent(this, UploadReceiver.class);

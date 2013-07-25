@@ -93,7 +93,6 @@ public class UploadDataService extends Service {
 
 		@Override
 		protected Void doInBackground(Void... arg0) {
-			// TODO Auto-generated method stub
 			Context context = getApplicationContext();
 			SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 			String user = mSharedPreferences.getString("username","user");
@@ -149,15 +148,13 @@ public class UploadDataService extends Service {
 						httpResponse.getProtocolVersion().toString());
 				Utils.log(new Date(), TAG, httpResponse.getStatusLine().toString()+", "+
 						httpResponse.getProtocolVersion().toString());
-				//boolean isDeleted = zipFile.delete();
-				//Log.d(TAG, "Zipfile is deleted:" + isDeleted);
-				//Utils.log(new Date(), TAG, "Zipfile is deleted:" + isDeleted);
+				boolean isDeleted = zipFile.delete();
+				Log.d(TAG, "Zipfile is deleted:" + isDeleted);
+				Utils.log(new Date(), TAG, "Zipfile is deleted:" + isDeleted);
 				if (httpResponse.getStatusLine().getStatusCode() == 200) {
-					// TODO SUCCESS
 					return "SUCCESS";
 				}
 				else {
-					// TODO FAILURE
 					return "FAILURE";
 				}
 			}

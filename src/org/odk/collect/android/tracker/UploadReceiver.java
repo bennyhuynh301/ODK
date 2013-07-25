@@ -15,7 +15,7 @@ public class UploadReceiver extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		Log.d(TAG, "UploadReceiver starts");
 		Utils.log(new Date(), TAG, "UploadReceiver starts");
-
+		
 		DetectionRequester mDetectionRequester = DetectionRequester.getInstance();
 		mDetectionRequester.setContext(context);
 		LocationUpdateRequester mLocationUpdateRequester = LocationUpdateRequester.getInstance();
@@ -32,12 +32,6 @@ public class UploadReceiver extends BroadcastReceiver {
 			try {
 				if (Utils.servicesConnected(context)) {
 					Log.d(TAG, "Start uploading the logfile");
-//					if (mLocationUpdateRequester.getRequestPendingIntent() != null) {
-//						mLocationUpdateRemover.removeUpdates(mLocationUpdateRequester.getRequestPendingIntent());
-//					}
-//					if (mDetectionRequester.getRequestPendingIntent() != null) {
-//						mDetectionRemover.removeUpdates(mDetectionRequester.getRequestPendingIntent());
-//					}
 					context.startService(new Intent(context, UploadDataService.class));
 				}
 			} catch (Exception e) {
@@ -49,8 +43,6 @@ public class UploadReceiver extends BroadcastReceiver {
 		else if (b != null && b.getString("RESP").equals("SUCCESS")) {
 			Log.d(TAG, b.getString("RESP"));
 			Utils.log(new Date(), TAG, b.getString("RESP"));
-//			Intent updateIntent = new Intent(context, UpdateReceiver.class);
-//			context.sendBroadcast(updateIntent);
 		}
 	}
 }
