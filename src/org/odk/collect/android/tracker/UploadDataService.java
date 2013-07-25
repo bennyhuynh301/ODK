@@ -1,10 +1,6 @@
 package org.odk.collect.android.tracker;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Date;
 
 import net.lingala.zip4j.core.ZipFile;
@@ -27,6 +23,8 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -42,6 +40,8 @@ public class UploadDataService extends Service {
 	private static final String TAG = "UploadDataService";
 	private static final String SERVER_URI = "http://184.169.166.200:61245/api/traces";
 	private static final String FILE_NAME = "tracker.txt";
+	
+	private Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 	private PowerManager.WakeLock wakeLock;
 	private WifiManager.WifiLock wifiLock;
 
@@ -127,15 +127,18 @@ public class UploadDataService extends Service {
 			BasicHttpResponse httpResponse = null;
 			File logFile = new File(Environment.getExternalStorageDirectory(), FILE_NAME);
 			if (logFile.exists()) {
-				String fileContent = UploadDataService.readFile(logFile);
-				int fileLength = fileContent.length();
-				Log.d(TAG, "File length: " + fileLength);
-				Utils.log(new Date(), TAG, "File length: " + fileLength);
+				double fileLength = logFile.length()/1024;
+				Log.d(TAG, "File size: " + fileLength);
+				Utils.log(new Date(), TAG, "File size: " + fileLength);
 				
 				String zipPath = zipFile(logFile);
 				Log.d(TAG, "Zip File:" + zipPath);
 				Utils.log(new Date(), TAG, "Zip File:" + zipPath);
+				
 				File zipFile = new File(zipPath);
+				double zipLength = zipFile.length()/1024;
+				Log.d(TAG, "Zip size: " + zipLength);
+				Utils.log(new Date(), TAG, "Zip size: " + zipLength);
 				
 				multEntity.addPart("user", new StringBody(user));
 				multEntity.addPart("phone_id", new StringBody(phoneID));
@@ -161,46 +164,11 @@ public class UploadDataService extends Service {
 		} catch (Exception e) {
 			Utils.log(new Date(), TAG, e.getMessage());
 			e.printStackTrace();
+			return "FAILURE";
 		}
 		return "UNKNOWN";
 	}
 
-	private static String readFile(File file) {
-		String ret = "";
-		FileInputStream in = null;
-		try {
-			in = new FileInputStream(file);
-			ret = read(in);
-			in.close();
-		} catch (FileNotFoundException e) {
-			Utils.log(new Date(), TAG, e.getMessage());
-			e.printStackTrace();
-			return null;
-		} catch (IOException e) {
-			Utils.log(new Date(), TAG, e.getMessage());
-			e.printStackTrace();
-		}
-		return ret;
-	}
-
-	private static String read(FileInputStream in) {
-		String content = "";
-		try {
-			ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-			int nRead;
-			byte[] data = new byte[2048];
-			while ((nRead = in.read(data, 0, data.length)) != -1) {
-				buffer.write(data, 0, nRead);
-			}
-			buffer.flush();
-			content = new String(buffer.toByteArray());
-		} catch (IOException e) {
-			Utils.log(new Date(), TAG, e.getMessage());
-			e.printStackTrace();
-		}
-		return content;
-	}
-	
 	private String zipFile(File file) {
 		String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/tracker_" + System.currentTimeMillis() + ".zip";
 		try {
@@ -229,7 +197,8 @@ public class UploadDataService extends Service {
         builder.setContentTitle("ODK Tracker")
                .setContentText("Please turn on Wifi")
                .setSmallIcon(R.drawable.study_logo)
-               .setContentIntent(getContentIntent("WIFI"));
+               .setContentIntent(getContentIntent("WIFI"))
+               .setSound(sound);
 
         NotificationManager notifyManager = (NotificationManager)
                 getSystemService(Context.NOTIFICATION_SERVICE);
@@ -243,7 +212,8 @@ public class UploadDataService extends Service {
         builder.setContentTitle("ODK Tracker")
                .setContentText("Please turn on data plan")
                .setSmallIcon(R.drawable.study_logo)
-               .setContentIntent(getContentIntent("DATA_PLAN"));
+               .setContentIntent(getContentIntent("DATA_PLAN"))
+               .setSound(sound);
 
         NotificationManager notifyManager = (NotificationManager)
                 getSystemService(Context.NOTIFICATION_SERVICE);
@@ -264,7 +234,6 @@ public class UploadDataService extends Service {
 
 	@Override
 	public IBinder onBind(Intent arg0) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

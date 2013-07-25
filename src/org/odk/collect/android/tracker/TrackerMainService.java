@@ -15,7 +15,7 @@ public class TrackerMainService extends Service {
 	private static final String TAG = "MAINSERVICE";
 	
 	private final int randomMin = (int) Math.random()*100 + 45;
-	private final int randomSecond = (int) Math.random()*100 + 60;
+	private final int randomSecond = (int) Math.random()*100 + 59;
 	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
