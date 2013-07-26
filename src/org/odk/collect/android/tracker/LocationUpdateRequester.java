@@ -121,15 +121,17 @@ public class LocationUpdateRequester implements ConnectionCallbacks, OnConnectio
 		mLocationClient = null;
 	}
 	
+	//Temporarily fixed.  Should implement better mechanism
 	@Override
 	public void onConnectionFailed(ConnectionResult connectionResult) {
 		if (connectionResult.hasResolution()) {
-            try {
-                connectionResult.startResolutionForResult((Activity) mContext,
-                    LocationUtils.CONNECTION_FAILURE_RESOLUTION_REQUEST);
-            } catch (SendIntentException e) {
-				Utils.log(new Date(), LocationUtils.APPTAG, e.getMessage());
-            }
+//            try {
+//                connectionResult.startResolutionForResult((Activity) mContext,
+//                    LocationUtils.CONNECTION_FAILURE_RESOLUTION_REQUEST);
+//            } catch (SendIntentException e) {
+//				Utils.log(new Date(), LocationUtils.APPTAG, e.getMessage());
+//            }
+			requestConnection();
         } 
 		else {
 			Log.d(LocationUtils.APPTAG, "Connection fails: " + connectionResult.getErrorCode());
