@@ -1,4 +1,4 @@
-package org.odk.collect.android.tracker;
+	package org.odk.collect.android.tracker;
 
 import java.io.File;
 import java.io.FileWriter;

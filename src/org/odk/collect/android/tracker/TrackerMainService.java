@@ -14,8 +14,8 @@ import android.util.Log;
 public class TrackerMainService extends Service {
 	private static final String TAG = "MAINSERVICE";
 	
-	private final int randomMin = (int) Math.random()*100 + 45;
-	private final int randomSecond = (int) Math.random()*100 + 59;
+	private final int randomMin = (int) (Math.random()*44 + 1);
+	private final int randomSecond = (int) (Math.random()*59 + 1);
 	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {

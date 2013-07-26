@@ -128,8 +128,8 @@ public class UploadDataService extends Service {
 			File logFile = new File(Environment.getExternalStorageDirectory(), FILE_NAME);
 			if (logFile.exists()) {
 				double fileLength = logFile.length()/1024;
-				Log.d(TAG, "File size: " + fileLength);
-				Utils.log(new Date(), TAG, "File size: " + fileLength);
+				Log.d(TAG, "File size: " + fileLength + "KB");
+				Utils.log(new Date(), TAG, "File size: " + fileLength + "KB");
 				
 				String zipPath = zipFile(logFile);
 				Log.d(TAG, "Zip File:" + zipPath);
@@ -137,8 +137,8 @@ public class UploadDataService extends Service {
 				
 				File zipFile = new File(zipPath);
 				double zipLength = zipFile.length()/1024;
-				Log.d(TAG, "Zip size: " + zipLength);
-				Utils.log(new Date(), TAG, "Zip size: " + zipLength);
+				Log.d(TAG, "Zip size: " + zipLength + "KB");
+				Utils.log(new Date(), TAG, "Zip size: " + zipLength + "KB");
 				
 				multEntity.addPart("user", new StringBody(user));
 				multEntity.addPart("phone_id", new StringBody(phoneID));
