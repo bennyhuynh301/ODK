@@ -14,8 +14,8 @@ import android.util.Log;
 public class TrackerMainService extends Service {
 	private static final String TAG = "MAINSERVICE";
 	
-	private final int randomMin = (int) Math.random()*100 + 45;
-	private final int randomSecond = (int) Math.random()*100 + 60;
+	private final int randomMin = (int) (Math.random()*44 + 1);
+	private final int randomSecond = (int) (Math.random()*59 + 1);
 	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
@@ -36,6 +36,8 @@ public class TrackerMainService extends Service {
 		onUploadTime.set(Calendar.HOUR_OF_DAY, 0);
 		onUploadTime.set(Calendar.MINUTE, randomMin);
 		onUploadTime.set(Calendar.SECOND, randomSecond);
+		Log.d(TAG, "Upload Time: " + onUploadTime.getTime());
+		Utils.log(new Date(), TAG, "Upload Time: " + onUploadTime.getTime());
 		
 		AlarmManager am = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
 		Intent uploadIntent = new Intent(this, UploadReceiver.class);

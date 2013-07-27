@@ -113,15 +113,17 @@ implements ConnectionCallbacks, OnConnectionFailedListener {
 		}
 	}
 
+	//Temporarily fixed.  Should implement better mechanism
 	@Override
 	public void onConnectionFailed(ConnectionResult connectionResult) {
 		if (connectionResult.hasResolution()) {
-			try {
-				connectionResult.startResolutionForResult((Activity) mContext,
-						ActivityUtils.CONNECTION_FAILURE_RESOLUTION_REQUEST);
-			} catch (SendIntentException e) {
-				Utils.log(new Date(), ActivityUtils.APPTAG, e.getMessage());
-			}
+//			try {
+//				connectionResult.startResolutionForResult((Activity) mContext,
+//						ActivityUtils.CONNECTION_FAILURE_RESOLUTION_REQUEST);
+//			} catch (SendIntentException e) {
+//				Utils.log(new Date(), ActivityUtils.APPTAG, e.getMessage());
+//			}
+			requestConnection();
 		} 
 		else {
 			Log.d(ActivityUtils.APPTAG, "Connection fails: " + connectionResult.getErrorCode());
