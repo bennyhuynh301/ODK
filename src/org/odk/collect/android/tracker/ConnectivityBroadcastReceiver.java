@@ -43,8 +43,8 @@ public class ConnectivityBroadcastReceiver extends BroadcastReceiver {
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(mContext);
 
-        builder.setContentTitle("ODK Tracker")
-               .setContentText("Please turn on Wifi")
+        builder.setContentTitle("Travel Quality Study")
+               .setContentText("Please make sure Wifi is on.")
                .setSmallIcon(R.drawable.study_logo)
                .setContentIntent(getContentIntent("WIFI"))
                .setSound(sound);
@@ -58,8 +58,8 @@ public class ConnectivityBroadcastReceiver extends BroadcastReceiver {
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(mContext);
 
-        builder.setContentTitle("ODK Tracker")
-               .setContentText("Please turn on data plan")
+        builder.setContentTitle("Travel Quality Study")
+               .setContentText("Please make sure the data connection is enabled.")
                .setSmallIcon(R.drawable.study_logo)
                .setContentIntent(getContentIntent("DATA_PLAN"))
                .setSound(sound);
