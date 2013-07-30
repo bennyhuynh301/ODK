@@ -16,9 +16,9 @@ public class MainService extends Service {
 	@Override
 	public void onCreate(){
 		super.onCreate();
-		//These receiver are called below when getBroadcast
-		sendBroadcast(new Intent("settimetrigger"));
-        sendBroadcast(new Intent("downloadrequest"));
+		//These receivers are called below in getBroadcast
+		//sendBroadcast(new Intent("settimetrigger"));
+        	//sendBroadcast(new Intent("downloadrequest"));
         
 		Log.i("t", "MainServiceCalled");
 		Calendar calendar = Calendar.getInstance();
