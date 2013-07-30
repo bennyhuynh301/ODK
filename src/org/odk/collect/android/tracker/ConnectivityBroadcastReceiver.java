@@ -44,7 +44,7 @@ public class ConnectivityBroadcastReceiver extends BroadcastReceiver {
                 new NotificationCompat.Builder(mContext);
 
         builder.setContentTitle("Travel Quality Study")
-               .setContentText("Please make sure Wifi is on.")
+               .setContentText("Please make sure Wifi is enabled.")
                .setSmallIcon(R.drawable.study_logo)
                .setContentIntent(getContentIntent("WIFI"))
                .setSound(sound);
@@ -59,7 +59,7 @@ public class ConnectivityBroadcastReceiver extends BroadcastReceiver {
                 new NotificationCompat.Builder(mContext);
 
         builder.setContentTitle("Travel Quality Study")
-               .setContentText("Please make sure the data connection is enabled.")
+               .setContentText("Please make sure mobile data is enabled.")
                .setSmallIcon(R.drawable.study_logo)
                .setContentIntent(getContentIntent("DATA_PLAN"))
                .setSound(sound);
