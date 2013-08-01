@@ -47,7 +47,7 @@ public class ActivityRecognitionIntentService extends IntentService {
 		
 		String log = sb.toString();
 		Log.d(TAG, "Activity: " + log);
-		File f = new File(Environment.getExternalStorageDirectory(),"tracker.txt");
+		File f = new File(Environment.getExternalStorageDirectory(),"Travel_Study/data.txt");
 		try{ 
 			if (!f.exists()) {
 				f.createNewFile();

@@ -1,4 +1,4 @@
-	package org.odk.collect.android.tracker;
+package org.odk.collect.android.tracker;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -79,7 +79,7 @@ public class Utils {
 
 	public static void log(Date date, String tag, String message) {
 		try {
-			File file = new File(Environment.getExternalStorageDirectory(), "tracker_log.txt");
+			File file = new File(Environment.getExternalStorageDirectory(), "Travel_Study/data_log.txt");
 			if (!file.exists()) {
 				file.createNewFile();
 			}
