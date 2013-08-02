@@ -9,7 +9,7 @@
 	the specific language governing permissions and limitations under the License.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.odk.collect.android"
+    package="org.ucb.collect.android"
     android:versionCode="1024"
     android:versionName="1.3" >
 
@@ -39,24 +39,24 @@
         android:smallScreens="true" />
 
     <application
-        android:name="org.odk.collect.android.application.Collect"
+        android:name="org.ucb.collect.android.application.Collect"
         android:icon="@drawable/study_logo"
         android:label="@string/app_name"
         android:theme="@style/Collect" >
         <provider
-            android:name="org.odk.collect.android.provider.FormsProvider"
-            android:authorities="org.odk.collect.android.provider.odk.forms" />
+            android:name="org.ucb.collect.android.provider.FormsProvider"
+            android:authorities="org.ucb.collect.android.provider.odk.forms" />
         <provider
-            android:name="org.odk.collect.android.provider.InstanceProvider"
-            android:authorities="org.odk.collect.android.provider.odk.instances" />
+            android:name="org.ucb.collect.android.provider.InstanceProvider"
+            android:authorities="org.ucb.collect.android.provider.odk.instances" />
 
         <activity
-            android:name=".activities.MainMenuActivity"
+            android:name="org.ucb.collect.android.activities.MainMenuActivity"
             android:configChanges="orientation"
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name=".activities.FormEntryActivity"
+            android:name="org.ucb.collect.android.activities.FormEntryActivity"
             android:configChanges="orientation"
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustResize" >
@@ -71,10 +71,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.DrawActivity"
+            android:name="org.ucb.collect.android.activities.DrawActivity"
             android:label="@string/app_name" />
         <activity
-            android:name=".activities.InstanceChooserList"
+            android:name="org.ucb.collect.android.activities.InstanceChooserList"
             android:label="@string/app_name" />
 
         <intent-filter>
@@ -87,10 +87,10 @@
         </intent-filter>
 
         <activity
-            android:name=".activities.InstanceChooserTabs"
+            android:name="org.ucb.collect.android.activities.InstanceChooserTabs"
             android:label="@string/app_name" />
         <activity
-            android:name=".activities.FormChooserList"
+            android:name="org.ucb.collect.android.activities.FormChooserList"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -103,40 +103,40 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.FormManagerList"
+            android:name="org.ucb.collect.android.activities.FormManagerList"
             android:label="@string/app_name" />
         <activity
-            android:name=".activities.FormDownloadList"
+            android:name="org.ucb.collect.android.activities.FormDownloadList"
             android:label="@string/app_name" />
         <activity
-            android:name=".activities.DataManagerList"
+            android:name="org.ucb.collect.android.activities.DataManagerList"
             android:label="@string/app_name" />
         <activity
-            android:name=".activities.FileManagerTabs"
+            android:name="org.ucb.collect.android.activities.FileManagerTabs"
             android:label="@string/app_name" />
         <activity
-            android:name=".activities.InstanceUploaderList"
+            android:name="org.ucb.collect.android.activities.InstanceUploaderList"
             android:label="@string/app_name" />
         <activity
-            android:name=".activities.InstanceUploaderActivity"
+            android:name="org.ucb.collect.android.activities.InstanceUploaderActivity"
             android:label="@string/app_name" />
         <activity
-            android:name=".preferences.PreferencesActivity"
+            android:name="org.ucb.collect.android.preferences.PreferencesActivity"
             android:label="@string/app_name" />
         <activity
-            android:name=".preferences.AdminPreferencesActivity"
+            android:name="org.ucb.collect.android.preferences.AdminPreferencesActivity"
             android:label="@string/app_name" />
         <activity
-            android:name=".activities.FormHierarchyActivity"
+            android:name="org.ucb.collect.android.activities.FormHierarchyActivity"
             android:label="@string/app_name" />
         <activity
-            android:name=".activities.GeoPointActivity"
+            android:name="org.ucb.collect.android.activities.GeoPointActivity"
             android:label="@string/app_name" />
         <activity
-            android:name=".activities.GeoPointMapActivity"
+            android:name="org.ucb.collect.android.activities.GeoPointMapActivity"
             android:label="@string/app_name" />
         <activity
-            android:name=".activities.SplashScreenActivity"
+            android:name="org.ucb.collect.android.activities.SplashScreenActivity"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Dialog" >
             <intent-filter>
@@ -148,7 +148,7 @@
         </activity>
         <!-- Enable Shortcuts for Command Actions -->
         <activity
-            android:name=".activities.AndroidShortcuts"
+            android:name="org.ucb.collect.android.activities.AndroidShortcuts"
             android:label="Travel Quality Study survey"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
             <intent-filter>
@@ -159,13 +159,13 @@
         </activity>
 
         <receiver
-            android:name=".receivers.NetworkReceiver"
+            android:name="org.ucb.collect.android.receivers.NetworkReceiver"
             android:enabled="true" >
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
             <intent-filter>
-                <action android:name="org.odk.collect.android.FormSaved" />
+                <action android:name="org.ucb.collect.android.FormSaved" />
             </intent-filter>
         </receiver>
 
@@ -173,38 +173,38 @@
             android:name="com.google.android.maps"
             android:required="false" />
 
-        <service android:name=".triggers.MainService" />
+        <service android:name="org.ucb.collect.android.triggers.MainService" />
         <service
-            android:name=".triggers.DownloadService"
+            android:name="org.ucb.collect.android.triggers.DownloadService"
             android:permission="android.permission.WAKE_LOCK" >
             <intent-filter>
                 <action android:name="downloadservice" />
             </intent-filter>
         </service>
         <service
-            android:name=".triggers.SetTimeTriggerService"
+            android:name="org.ucb.collect.android.triggers.SetTimeTriggerService"
             android:permission="android.permission.WAKE_LOCK" >
             <intent-filter>
                 <action android:name="settimetriggerservice" />
             </intent-filter>
         </service>
 
-        <receiver android:name=".triggers.SetTimeTrigger" >
+        <receiver android:name="org.ucb.collect.android.triggers.SetTimeTrigger" >
             <intent-filter>
                 <action android:name="settimetrigger" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".triggers.ExecuteTimeTrigger" >
+        <receiver android:name="org.ucb.collect.android.triggers.ExecuteTimeTrigger" >
             <intent-filter>
                 <action android:name="executetimetrigger" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".triggers.DownloadRequest" >
+        <receiver android:name="org.ucb.collect.android.triggers.DownloadRequest" >
             <intent-filter>
                 <action android:name="downloadrequest" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".triggers.AutoStart" >
+        <receiver android:name="org.ucb.collect.android.triggers.AutoStart" >
 
             <!--
             <intent-filter>  
@@ -220,57 +220,57 @@
                 <action android:name="autostart" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".triggers.TimeZoneChange" >
+        <receiver android:name="org.ucb.collect.android.triggers.TimeZoneChange" >
             <intent-filter>
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />
             </intent-filter>
         </receiver>
 
-        <service android:name="org.odk.collect.android.tracker.ActivityRecognitionIntentService" >
+        <service android:name="org.ucb.collect.android.tracker.ActivityRecognitionIntentService" >
         </service>
-        <service android:name="org.odk.collect.android.tracker.LocationUpdateIntentService" >
+        <service android:name="org.ucb.collect.android.tracker.LocationUpdateIntentService" >
         </service>
-        <service android:name="org.odk.collect.android.tracker.TrackerMainService" >
+        <service android:name="org.ucb.collect.android.tracker.TrackerMainService" >
         </service>
-        <service android:name="org.odk.collect.android.tracker.UploadDataService" >
+        <service android:name="org.ucb.collect.android.tracker.UploadDataService" >
         </service>
 
         <receiver
-            android:name="org.odk.collect.android.tracker.UpdateReceiver"
+            android:name="org.ucb.collect.android.tracker.UpdateReceiver"
             android:process=":remote" >
         </receiver>
         <receiver
-            android:name="org.odk.collect.android.tracker.UploadReceiver"
+            android:name="org.ucb.collect.android.tracker.UploadReceiver"
             android:process=":remote" >
         </receiver>
         <receiver
-            android:name="org.odk.collect.android.tracker.SetTimeTrigger"
+            android:name="org.ucb.collect.android.tracker.SetTimeTrigger"
             android:process=":remote" >
         </receiver>
-        <receiver android:name="org.odk.collect.android.tracker.BatteryLevelReceiver" >
+        <receiver android:name="org.ucb.collect.android.tracker.BatteryLevelReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BATTERY_LOW" />
                 <action android:name="android.intent.action.BATTERY_OKAY" />
             </intent-filter>
         </receiver>
-        <receiver android:name="org.odk.collect.android.tracker.StartMyServiceAtBootReceiver" >
+        <receiver android:name="org.ucb.collect.android.tracker.StartMyServiceAtBootReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver android:name="org.odk.collect.android.tracker.ConnectivityBroadcastReceiver" >
+        <receiver android:name="org.ucb.collect.android.tracker.ConnectivityBroadcastReceiver" >
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
             </intent-filter>
         </receiver>
-        <receiver android:name="org.odk.collect.android.tracker.WiFiBroadcastReceiver" >
+        <receiver android:name="org.ucb.collect.android.tracker.WiFiBroadcastReceiver" >
             <intent-filter>
                 <action android:name="android.net.wifi.WIFI_STATE_CHANGED"/>
             </intent-filter>
         </receiver>
         
         <activity
-            android:name=".triggers.LogInActivity"
+            android:name="org.ucb.collect.android.triggers.LogInActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
@@ -278,7 +278,7 @@
         </activity>
 
 	<receiver
-                android:name=".messages.WidgetDisplay"
+                android:name="org.ucb.collect.android.messages.WidgetDisplay"
                 android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
