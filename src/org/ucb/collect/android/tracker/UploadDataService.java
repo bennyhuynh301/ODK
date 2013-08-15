@@ -1,6 +1,7 @@
 package org.ucb.collect.android.tracker;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
 
 import net.lingala.zip4j.core.ZipFile;
@@ -31,7 +32,10 @@ import android.util.Log;
 public class UploadDataService extends Service {
 	private static final String TAG = "UploadDataService";
 	private static final String SERVER_URI = "http://184.169.166.200:61245/api/traces";
-	private static final String FILE_NAME = "Travel_Study/data.txt";
+	private static final String TRACKER_FILE = "Travel_Study/data.txt";
+	private static final String ACCEL_FILE = "Travel_Study/data_accel.txt";
+	private static final String DEBUG_FILE = "Travel_Study/data_log.txt";
+
 	
 	private PowerManager.WakeLock wakeLock;
 	private WifiManager.WifiLock wifiLock;
@@ -96,8 +100,12 @@ public class UploadDataService extends Service {
 				Utils.retryLater(context,SetTimeTrigger.class, 3600);
 			}
 			else if (response.equals("SUCCESS")) {
-				File logFile = new File(Environment.getExternalStorageDirectory(), FILE_NAME);
-				logFile.delete();
+				File trackerFile = new File(Environment.getExternalStorageDirectory(), TRACKER_FILE);
+				trackerFile.delete();
+				File accelFile = new File(Environment.getExternalStorageDirectory(), ACCEL_FILE);
+				accelFile.delete();
+				File debugFile = new File(Environment.getExternalStorageDirectory(), DEBUG_FILE);
+				debugFile.delete();
 				Log.d(TAG, "Upload success");
 				Utils.log(new Date(), TAG, "Upload success");
 				Intent respIntent = new Intent(context, UploadReceiver.class);
@@ -114,13 +122,23 @@ public class UploadDataService extends Service {
 			HttpPost httpPost = new HttpPost(SERVER_URI);
 			MultipartEntity multEntity = new MultipartEntity();
 			BasicHttpResponse httpResponse = null;
-			File logFile = new File(Environment.getExternalStorageDirectory(), FILE_NAME);
-			if (logFile.exists()) {
-				double fileLength = logFile.length()/1024;
-				Log.d(TAG, "File size: " + fileLength + "KB");
-				Utils.log(new Date(), TAG, "File size: " + fileLength + "KB");
+			
+			File trackerFile = new File(Environment.getExternalStorageDirectory(), TRACKER_FILE);
+			File accelFile = new File(Environment.getExternalStorageDirectory(), ACCEL_FILE);
+			File debugFile = new File(Environment.getExternalStorageDirectory(), DEBUG_FILE);
+
+			ArrayList<File> files = new ArrayList<File>();
+			
+			if (trackerFile.exists()) {
+				files.add(trackerFile);
+				if (accelFile.exists()) {
+					files.add(accelFile);
+				}
+				if (debugFile.exists()) {
+					files.add(debugFile);
+				}
 				
-				String zipPath = zipFile(logFile);
+				String zipPath = zipFile(files);
 				Log.d(TAG, "Zip File:" + zipPath);
 				Utils.log(new Date(), TAG, "Zip File:" + zipPath);
 				
@@ -158,7 +176,7 @@ public class UploadDataService extends Service {
 		return "UNKNOWN";
 	}
 
-	private String zipFile(File file) {
+	private String zipFile(ArrayList<File> files) {
 		String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/data_" + System.currentTimeMillis() + ".zip";
 		try {
 			ZipFile zipFile = new ZipFile(path);
@@ -169,7 +187,7 @@ public class UploadDataService extends Service {
 			parameters.setEncryptionMethod(Zip4jConstants.ENC_METHOD_STANDARD);
 			parameters.setAesKeyStrength(Zip4jConstants.AES_STRENGTH_128);
 			parameters.setPassword("ucberkeley");
-			zipFile.addFile(file, parameters);
+			zipFile.addFiles(files, parameters);
 			Log.d(TAG, "Is Encrypted: " + zipFile.isEncrypted());
 			Utils.log(new Date(), TAG, "Is Encrypted: " + zipFile.isEncrypted());
 		} catch (Exception e) {

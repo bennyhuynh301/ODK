@@ -42,7 +42,8 @@ public class WiFiBroadcastReceiver extends BroadcastReceiver {
 		.setContentText("Please make sure Wifi is enabled.")
 		.setSmallIcon(R.drawable.study_logo)
 		.setContentIntent(getContentIntent())
-		.setSound(sound);
+		.setSound(sound)
+		.setAutoCancel(true);
 
 		NotificationManager notifyManager = (NotificationManager)
 				mContext.getSystemService(Context.NOTIFICATION_SERVICE);

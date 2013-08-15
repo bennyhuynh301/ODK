@@ -24,8 +24,9 @@ import android.util.Log;
 public class TrackerMainService extends Service {
 	private static final String TAG = "MAINSERVICE";
 	private Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-	private final int randomMin = (int) (Math.random()*44 + 1);
-	private final int randomSecond = (int) (Math.random()*59 + 1);
+	private final int randomHour = (int) (Math.random()*3);
+	private final int randomMin = (int) (Math.random()*60);
+	private final int randomSecond = (int) (Math.random()*60);
 	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
@@ -49,8 +50,8 @@ public class TrackerMainService extends Service {
 		}
 
 		Calendar onUploadTime = Calendar.getInstance();
-		onUploadTime.set(Calendar.HOUR_OF_DAY, 16);
-		onUploadTime.set(Calendar.MINUTE, 2);
+		onUploadTime.set(Calendar.HOUR_OF_DAY, randomHour);
+		onUploadTime.set(Calendar.MINUTE, randomMin);
 		onUploadTime.set(Calendar.SECOND, randomSecond);
 		Log.d(TAG, "Upload Time: " + onUploadTime.getTime());
 		Utils.log(new Date(), TAG, "Upload Time: " + onUploadTime.getTime());
@@ -93,7 +94,8 @@ public class TrackerMainService extends Service {
 		.setContentText("Please make sure Wifi is enabled.")
 		.setSmallIcon(R.drawable.study_logo)
 		.setContentIntent(getContentIntent("WIFI"))
-		.setSound(sound);
+		.setSound(sound)
+		.setAutoCancel(true);
 
 		NotificationManager notifyManager = (NotificationManager)
 				getSystemService(Context.NOTIFICATION_SERVICE);

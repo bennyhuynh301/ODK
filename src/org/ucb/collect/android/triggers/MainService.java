@@ -12,19 +12,19 @@ import android.os.IBinder;
 import android.util.Log;
 
 public class MainService extends Service {
+	private final int randomHour = (int) (Math.random()*3 + 3);
+	private final int randomMin = (int) (Math.random()*60);
+	private final int randomSecond = (int) (Math.random()*60);
 
 	@Override
 	public void onCreate(){
 		super.onCreate();
-		//These receivers are called below in getBroadcast
-		//sendBroadcast(new Intent("settimetrigger"));
-        	//sendBroadcast(new Intent("downloadrequest"));
         
 		Log.i("t", "MainServiceCalled");
 		Calendar calendar = Calendar.getInstance();
-		calendar.set(Calendar.HOUR_OF_DAY, 4);
-		calendar.set(Calendar.MINUTE, 6);
-		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.HOUR_OF_DAY, randomHour);
+		calendar.set(Calendar.MINUTE, randomMin);
+		calendar.set(Calendar.SECOND, randomSecond);
 		
 		AlarmManager cron = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         

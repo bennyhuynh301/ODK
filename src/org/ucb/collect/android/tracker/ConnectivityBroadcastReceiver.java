@@ -48,15 +48,16 @@ public class ConnectivityBroadcastReceiver extends BroadcastReceiver {
 		builder.setContentTitle("Travel Quality Study")
 		.setContentText("Please make sure mobile data is enabled.")
 		.setSmallIcon(R.drawable.study_logo)
-		.setContentIntent(getContentIntent("DATA_PLAN"))
-		.setSound(sound);
+		.setContentIntent(getContentIntent())
+		.setSound(sound)
+		.setAutoCancel(true);
 
 		NotificationManager notifyManager = (NotificationManager)
 				mContext.getSystemService(Context.NOTIFICATION_SERVICE);
 		notifyManager.notify(0, builder.build());
 	}
 
-	private PendingIntent getContentIntent(String networkType) {
+	private PendingIntent getContentIntent() {
 		Intent intent = new Intent(Settings.ACTION_DATA_ROAMING_SETTINGS);
 		return PendingIntent.getActivity(mContext, 0, intent,
 				PendingIntent.FLAG_UPDATE_CURRENT);
