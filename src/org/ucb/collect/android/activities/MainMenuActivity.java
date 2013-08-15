@@ -108,7 +108,9 @@ public class MainMenuActivity extends Activity {
     	startService(new Intent(MainMenuActivity.this, MainService.class));
     	// start the tracker service in the background
     	startService(new Intent(MainMenuActivity.this, org.ucb.collect.android.tracker.TrackerMainService.class));
-    	
+    	// start the motion service
+    	startService(new Intent(MainMenuActivity.this, org.ucb.collect.android.tracker.MotionService.class));
+
 		// must be at the beginning of any activity that can be called from an
 		// external intent
 		Log.i(t, "Starting up, creating directories");

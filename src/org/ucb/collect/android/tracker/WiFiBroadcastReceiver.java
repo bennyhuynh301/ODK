@@ -41,7 +41,7 @@ public class WiFiBroadcastReceiver extends BroadcastReceiver {
 		builder.setContentTitle("Travel Quality Study")
 		.setContentText("Please make sure Wifi is enabled.")
 		.setSmallIcon(R.drawable.study_logo)
-		.setContentIntent(getContentIntent("WIFI"))
+		.setContentIntent(getContentIntent())
 		.setSound(sound);
 
 		NotificationManager notifyManager = (NotificationManager)
@@ -49,10 +49,9 @@ public class WiFiBroadcastReceiver extends BroadcastReceiver {
 		notifyManager.notify(1, builder.build());
 	}
 
-	private PendingIntent getContentIntent(String networkType) {
+	private PendingIntent getContentIntent() {
 		Intent	intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
 		return PendingIntent.getActivity(mContext, 0, intent,
 				PendingIntent.FLAG_UPDATE_CURRENT);
 	}
-
 }

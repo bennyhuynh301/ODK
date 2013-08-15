@@ -31,7 +31,7 @@ public class ConnectivityBroadcastReceiver extends BroadcastReceiver {
 		if (noConnectivity) {
 			Log.d(TAG, "No connection");
 			Utils.log(new Date(), TAG, "No connection");
-			if (!isMobileEnabled()) {
+			if (!isMobileDataEnabled()) {
 				sendDataPlanNotification();
 			}
 		}
@@ -62,7 +62,7 @@ public class ConnectivityBroadcastReceiver extends BroadcastReceiver {
 				PendingIntent.FLAG_UPDATE_CURRENT);
 	}
 
-	private boolean isMobileEnabled() {
+	private boolean isMobileDataEnabled() {
 		boolean mobileDataEnabled = false;
 		ConnectivityManager cm = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
 		try {

@@ -16,18 +16,28 @@ import org.json.JSONObject;
 import org.ucb.collect.android.R;
 import org.ucb.collect.android.triggers.Utils;
 
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.widget.RemoteViews;
 
 public class WidgetDisplay extends AppWidgetProvider {
+	
+	private static final String ACTION_WIDGET_CLICK = "Widget_Clickable";
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new MyTime(context, appWidgetManager), 1, 1000*60*60);
+        
+        Intent intent = new Intent(context, WidgetDisplay.class);
+        intent.setAction(ACTION_WIDGET_CLICK);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
+        views.setOnClickPendingIntent(R.id.widget_layout, pendingIntent);
     }
 
     private class MyTime extends TimerTask {
@@ -50,6 +60,20 @@ public class WidgetDisplay extends AppWidgetProvider {
         }
 
     }
+    
+    @Override
+    public void onReceive(Context context, Intent intent) {
+    	super.onReceive(context, intent);
+    	if (intent.getAction().equals(ACTION_WIDGET_CLICK)) {
+    		AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
+            ComponentName thisWidget = new ComponentName(context, WidgetDisplay.class);
+
+            remoteViews.setTextViewText(R.id.widget_textview, getMessages(context));
+            appWidgetManager.updateAppWidget(thisWidget, remoteViews);
+    	}
+    }
+    
     public static String getMessages(Context context){
         String response = "";
         SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);

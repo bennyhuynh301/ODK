@@ -49,8 +49,8 @@ public class TrackerMainService extends Service {
 		}
 
 		Calendar onUploadTime = Calendar.getInstance();
-		onUploadTime.set(Calendar.HOUR_OF_DAY, 0);
-		onUploadTime.set(Calendar.MINUTE, randomMin);
+		onUploadTime.set(Calendar.HOUR_OF_DAY, 16);
+		onUploadTime.set(Calendar.MINUTE, 2);
 		onUploadTime.set(Calendar.SECOND, randomSecond);
 		Log.d(TAG, "Upload Time: " + onUploadTime.getTime());
 		Utils.log(new Date(), TAG, "Upload Time: " + onUploadTime.getTime());
