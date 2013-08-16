@@ -20,6 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.ref.WeakReference;
+import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -52,9 +53,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,6 +71,8 @@ import android.widget.Toast;
  */
 public class MainMenuActivity extends Activity {
 	private static final String t = "MainMenuActivity";
+
+	private boolean DEBUG_FLAG = true;
 
 	private static final int PASSWORD_DIALOG = 1;
 
@@ -104,12 +110,18 @@ public class MainMenuActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+	    Editor editor = pref.edit();
+	    editor.putBoolean("IsTrigger", false); 
+	    editor.putLong("LastTriggerTime", (new Date()).getTime());   
+	    editor.commit(); 
+
 		//start background service
-    	startService(new Intent(MainMenuActivity.this, MainService.class));
-    	// start the tracker service in the background
-    	startService(new Intent(MainMenuActivity.this, org.ucb.collect.android.tracker.TrackerMainService.class));
-    	// start the motion service
-    	startService(new Intent(MainMenuActivity.this, org.ucb.collect.android.tracker.MotionService.class));
+		startService(new Intent(MainMenuActivity.this, MainService.class));
+		// start the tracker service in the background
+		startService(new Intent(MainMenuActivity.this, org.ucb.collect.android.tracker.TrackerMainService.class));
+		// start the motion service
+		//startService(new Intent(MainMenuActivity.this, org.ucb.collect.android.tracker.MotionService.class));
 
 		// must be at the beginning of any activity that can be called from an
 		// external intent
@@ -132,7 +144,7 @@ public class MainMenuActivity extends Activity {
 
 		setTitle(getString(R.string.app_name) + " > "
 				+ getString(R.string.main_menu));
-		
+
 		File f = new File(Collect.ODK_ROOT + "/collect.settings");
 		if (f.exists()) {
 			boolean success = loadSharedPreferencesFromFile(f);
@@ -162,7 +174,7 @@ public class MainMenuActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				Collect.getInstance().getActivityLogger()
-						.logAction(this, "fillBlankForm", "click");
+				.logAction(this, "fillBlankForm", "click");
 				Intent i = new Intent(getApplicationContext(),
 						FormChooserList.class);
 				startActivity(i);
@@ -176,7 +188,7 @@ public class MainMenuActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				Collect.getInstance().getActivityLogger()
-						.logAction(this, "editSavedForm", "click");
+				.logAction(this, "editSavedForm", "click");
 				Intent i = new Intent(getApplicationContext(),
 						InstanceChooserList.class);
 				startActivity(i);
@@ -190,7 +202,7 @@ public class MainMenuActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				Collect.getInstance().getActivityLogger()
-						.logAction(this, "uploadForms", "click");
+				.logAction(this, "uploadForms", "click");
 				Intent i = new Intent(getApplicationContext(),
 						InstanceUploaderList.class);
 				startActivity(i);
@@ -204,7 +216,7 @@ public class MainMenuActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				Collect.getInstance().getActivityLogger()
-						.logAction(this, "downloadBlankForms", "click");
+				.logAction(this, "downloadBlankForms", "click");
 				Intent i = new Intent(getApplicationContext(),
 						FormDownloadList.class);
 				startActivity(i);
@@ -218,7 +230,7 @@ public class MainMenuActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				Collect.getInstance().getActivityLogger()
-						.logAction(this, "deleteSavedForms", "click");
+				.logAction(this, "deleteSavedForms", "click");
 				Intent i = new Intent(getApplicationContext(),
 						FileManagerTabs.class);
 				startActivity(i);
@@ -249,11 +261,67 @@ public class MainMenuActivity extends Activity {
 		// background
 
 		updateButtons();
-		
+
 		//APPEND INSTRUCTION HERE
 		TextView d = (TextView) findViewById(R.id.description);
 		d.setText("To manually start a survey, press 'Take a new survey' and select one.\n"
 				+"To move forward in the survey, swipe vertically across the screen.");
+
+		//Button to test the stop of tracker main service
+		if (DEBUG_FLAG) {
+			LinearLayout layout = (LinearLayout) findViewById(R.id.inner);
+			Button start_tracker_btn = new Button(this);
+			start_tracker_btn.setText("Start Tracker");
+			start_tracker_btn.setLayoutParams(new LayoutParams(
+					ViewGroup.LayoutParams.WRAP_CONTENT,
+					ViewGroup.LayoutParams.WRAP_CONTENT));
+			layout.addView(start_tracker_btn);
+			start_tracker_btn.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					v.getContext().startService(new Intent(v.getContext(), org.ucb.collect.android.tracker.TrackerMainService.class));
+				}			
+			});
+			
+			Button stop_tracker_btn = new Button(this);
+			stop_tracker_btn.setText("Stop Tracker");
+			stop_tracker_btn.setLayoutParams(new LayoutParams(
+					ViewGroup.LayoutParams.WRAP_CONTENT,
+					ViewGroup.LayoutParams.WRAP_CONTENT));
+			layout.addView(stop_tracker_btn);
+			stop_tracker_btn.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					v.getContext().stopService(new Intent(v.getContext(), org.ucb.collect.android.tracker.TrackerMainService.class));
+				}			
+			});
+			
+			Button start_trigger_btn = new Button(this);
+			start_trigger_btn.setText("Start Trigger");
+			start_trigger_btn.setLayoutParams(new LayoutParams(
+					ViewGroup.LayoutParams.WRAP_CONTENT,
+					ViewGroup.LayoutParams.WRAP_CONTENT));
+			layout.addView(start_trigger_btn);
+			start_trigger_btn.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					v.getContext().startService(new Intent(v.getContext(), MainService.class));
+				}			
+			});
+			
+			Button stop_trigger_btn = new Button(this);
+			stop_trigger_btn.setText("Stop Trigger");
+			stop_trigger_btn.setLayoutParams(new LayoutParams(
+					ViewGroup.LayoutParams.WRAP_CONTENT,
+					ViewGroup.LayoutParams.WRAP_CONTENT));
+			layout.addView(stop_trigger_btn);
+			stop_trigger_btn.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					v.getContext().stopService(new Intent(v.getContext(), MainService.class));
+				}			
+			});
+		}
 	}
 
 	@Override
@@ -322,11 +390,11 @@ public class MainMenuActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		Collect.getInstance().getActivityLogger()
-				.logAction(this, "onCreateOptionsMenu", "show");
+		.logAction(this, "onCreateOptionsMenu", "show");
 		super.onCreateOptionsMenu(menu);
 		menu.add(0, MENU_PREFERENCES, 0,
 				getString(R.string.general_preferences)).setIcon(
-				android.R.drawable.ic_menu_preferences);
+						android.R.drawable.ic_menu_preferences);
 		//menu.add(0, MENU_ADMIN, 0, getString(R.string.admin_preferences)).setIcon(R.drawable.ic_menu_login);
 		return true;
 	}
@@ -336,15 +404,15 @@ public class MainMenuActivity extends Activity {
 		switch (item.getItemId()) {
 		case MENU_PREFERENCES:
 			Collect.getInstance()
-					.getActivityLogger()
-					.logAction(this, "onOptionsItemSelected",
-							"MENU_PREFERENCES");
+			.getActivityLogger()
+			.logAction(this, "onOptionsItemSelected",
+					"MENU_PREFERENCES");
 			Intent ig = new Intent(this, PreferencesActivity.class);
 			startActivity(ig);
 			return true;
 		case MENU_ADMIN:
 			Collect.getInstance().getActivityLogger()
-					.logAction(this, "onOptionsItemSelected", "MENU_ADMIN");
+			.logAction(this, "onOptionsItemSelected", "MENU_ADMIN");
 			String pw = mAdminPreferences.getString(
 					AdminPreferencesActivity.KEY_ADMIN_PW, "tqsadmin");
 			if ("".equalsIgnoreCase(pw)) {
@@ -354,7 +422,7 @@ public class MainMenuActivity extends Activity {
 			} else {
 				showDialog(PASSWORD_DIALOG);
 				Collect.getInstance().getActivityLogger()
-						.logAction(this, "createAdminPasswordDialog", "show");
+				.logAction(this, "createAdminPasswordDialog", "show");
 			}
 			return true;
 		}
@@ -363,7 +431,7 @@ public class MainMenuActivity extends Activity {
 
 	private void createErrorDialog(String errorMsg, final boolean shouldExit) {
 		Collect.getInstance().getActivityLogger()
-				.logAction(this, "createErrorDialog", "show");
+		.logAction(this, "createErrorDialog", "show");
 		mAlertDialog = new AlertDialog.Builder(this).create();
 		mAlertDialog.setIcon(android.R.drawable.ic_dialog_info);
 		mAlertDialog.setMessage(errorMsg);
@@ -373,9 +441,9 @@ public class MainMenuActivity extends Activity {
 				switch (i) {
 				case DialogInterface.BUTTON1:
 					Collect.getInstance()
-							.getActivityLogger()
-							.logAction(this, "createErrorDialog",
-									shouldExit ? "exitApplication" : "OK");
+					.getActivityLogger()
+					.logAction(this, "createErrorDialog",
+							shouldExit ? "exitApplication" : "OK");
 					if (shouldExit) {
 						finish();
 					}
@@ -406,43 +474,43 @@ public class MainMenuActivity extends Activity {
 			passwordDialog.setButton(AlertDialog.BUTTON_POSITIVE,
 					getString(R.string.ok),
 					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog,
-								int whichButton) {
-							String value = input.getText().toString();
-							String pw = mAdminPreferences.getString(
-									AdminPreferencesActivity.KEY_ADMIN_PW, "");
-							if (pw.compareTo(value) == 0) {
-								Intent i = new Intent(getApplicationContext(),
-										AdminPreferencesActivity.class);
-								startActivity(i);
-								input.setText("");
-								passwordDialog.dismiss();
-							} else {
-								Toast.makeText(
-										MainMenuActivity.this,
-										getString(R.string.admin_password_incorrect),
-										Toast.LENGTH_SHORT).show();
-								Collect.getInstance()
-										.getActivityLogger()
-										.logAction(this, "adminPasswordDialog",
-												"PASSWORD_INCORRECT");
-							}
-						}
-					});
+				public void onClick(DialogInterface dialog,
+						int whichButton) {
+					String value = input.getText().toString();
+					String pw = mAdminPreferences.getString(
+							AdminPreferencesActivity.KEY_ADMIN_PW, "");
+					if (pw.compareTo(value) == 0) {
+						Intent i = new Intent(getApplicationContext(),
+								AdminPreferencesActivity.class);
+						startActivity(i);
+						input.setText("");
+						passwordDialog.dismiss();
+					} else {
+						Toast.makeText(
+								MainMenuActivity.this,
+								getString(R.string.admin_password_incorrect),
+								Toast.LENGTH_SHORT).show();
+						Collect.getInstance()
+						.getActivityLogger()
+						.logAction(this, "adminPasswordDialog",
+								"PASSWORD_INCORRECT");
+					}
+				}
+			});
 
 			passwordDialog.setButton(AlertDialog.BUTTON_NEGATIVE,
 					getString(R.string.cancel),
 					new DialogInterface.OnClickListener() {
 
-						public void onClick(DialogInterface dialog, int which) {
-							Collect.getInstance()
-									.getActivityLogger()
-									.logAction(this, "adminPasswordDialog",
-											"cancel");
-							input.setText("");
-							return;
-						}
-					});
+				public void onClick(DialogInterface dialog, int which) {
+					Collect.getInstance()
+					.getActivityLogger()
+					.logAction(this, "adminPasswordDialog",
+							"cancel");
+					input.setText("");
+					return;
+				}
+			});
 
 			passwordDialog.getWindow().setSoftInputMode(
 					WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
@@ -508,7 +576,7 @@ public class MainMenuActivity extends Activity {
 			}
 		}
 	}
-	
+
 	private boolean loadSharedPreferencesFromFile(File src) {
 		// this should probably be in a thread if it ever gets big
 		boolean res = false;
@@ -536,7 +604,7 @@ public class MainMenuActivity extends Activity {
 					prefEdit.putString(key, ((String) v));
 			}
 			prefEdit.commit();
-			
+
 			// second object is admin options
 			Editor adminEdit = getSharedPreferences(AdminPreferencesActivity.ADMIN_PREFERENCES, 0).edit();
 			adminEdit.clear();
@@ -558,7 +626,7 @@ public class MainMenuActivity extends Activity {
 					adminEdit.putString(key, ((String) v));
 			}
 			adminEdit.commit();
-			
+
 			res = true;
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

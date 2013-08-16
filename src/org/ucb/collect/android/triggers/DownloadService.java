@@ -53,21 +53,24 @@ FormDownloaderListener, DeleteFormsListener {
 		Log.i(TAG, "DownloadService onStart");
 	    switch (Utils.networkState(this)){
 	    	case Utils.NO_CONNECTION:
-	    		Log.i(TAG, "DownloadServiceRetry NO_CONNECTION");
+	    		Log.d(TAG, "DownloadServiceRetry NO_CONNECTION");
 				Utils.retryLater(this, DownloadRequest.class, 3600);
 				stopSelf();
 				break;
 	    	case Utils.WAIT_FOR_WIFI:
-	    		Log.i(TAG, "DownloadService WAIT_FOR_WIFI");
+	    		Log.d(TAG, "DownloadService WAIT_FOR_WIFI");
 				Utils.retryLater(this, DownloadRequest.class, 10);
 				break;
 	    	case Utils.HAS_CONNECTION:
-	    		Log.i(TAG, "DownloadServiceRetry HAS_CONNECTION");
+	    		Log.d(TAG, "DownloadServiceRetry HAS_CONNECTION");
 	    		if (hasInternet()){
-	    			Log.i(TAG, "hasInternet True");
+	    			Log.d(TAG, "hasInternet True");
 	    			fetchingForms();	
+	    			SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+	    			editor.putBoolean("IsTrigger", true);
+	    			editor.commit();
 	    		}else{
-	    			Log.i(TAG, "DownloadServiceRetry NO_INTERNET");
+	    			Log.d(TAG, "DownloadServiceRetry NO_INTERNET");
 	    			Utils.retryLater(this, DownloadRequest.class, 3600);
 	    			stopSelf();
 	    		}

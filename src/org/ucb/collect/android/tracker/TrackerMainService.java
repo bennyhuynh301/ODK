@@ -34,6 +34,7 @@ public class TrackerMainService extends Service {
 		Utils.log(new Date(), TAG, "Start main service");
 		checkWifi();
 		Intent updateIntent = new Intent(this, UpdateReceiver.class);
+		updateIntent.setAction("START_UPDATE");
 		this.sendBroadcast(updateIntent);
 		return Service.START_STICKY;
 	}
@@ -68,6 +69,9 @@ public class TrackerMainService extends Service {
 		Log.d(TAG, "Destroy main service");
 		Utils.log(new Date(), TAG, "Destroy main service");
 		super.onDestroy();
+		Intent stopUpdate = new Intent(this, UpdateReceiver.class);
+		stopUpdate.setAction("STOP_UPDATE");
+		this.sendBroadcast(stopUpdate);
 	}
 	
 	@Override

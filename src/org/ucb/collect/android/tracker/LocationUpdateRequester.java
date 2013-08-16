@@ -80,6 +80,7 @@ public class LocationUpdateRequester implements ConnectionCallbacks, OnConnectio
 
 	private PendingIntent createRequestPendingIntent() {
 		if (getRequestPendingIntent() != null) {
+			Log.d("LocationUpdateRequester", mUpdateLocationPendingIntent.toString());
 			return mUpdateLocationPendingIntent;
 		}
 		else {
@@ -87,6 +88,7 @@ public class LocationUpdateRequester implements ConnectionCallbacks, OnConnectio
 			PendingIntent pendingIntent = PendingIntent.getService(mContext, 0, intent, 
 					PendingIntent.FLAG_UPDATE_CURRENT);
 			setRequestPendingIntent(pendingIntent);
+			Log.d("LocationUpdateRequester", pendingIntent.toString());
 			return pendingIntent;
 		}
 	}
@@ -103,6 +105,7 @@ public class LocationUpdateRequester implements ConnectionCallbacks, OnConnectio
 		if (mLocationClient == null) {
 			mLocationClient = new LocationClient(mContext, this, this);
 		}
+		Log.d("LocationUpdateRequester", mLocationClient.toString());
 		return mLocationClient;
 	}
 
@@ -113,6 +116,7 @@ public class LocationUpdateRequester implements ConnectionCallbacks, OnConnectio
 			mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
 			mLocationRequest.setFastestInterval(LocationUtils.FAST_INTERVAL_CEILING_IN_MILLISECONDS);
 		}
+		Log.d("LocationUpdateRequester", mLocationRequest.toString());
 		return mLocationRequest;
 	}
 

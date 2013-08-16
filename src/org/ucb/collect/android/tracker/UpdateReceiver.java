@@ -16,14 +16,28 @@ public class UpdateReceiver extends BroadcastReceiver {
 		mDetectionRequester.setContext(context);
 		LocationUpdateRequester mLocationUpdateRequester = LocationUpdateRequester.getInstance();
 		mLocationUpdateRequester.setContext(context);
+		
+		DetectionRemover mDetectionRemover = DetectionRemover.getInstance();
+		mDetectionRemover.setContext(context);
+		LocationUpdateRemover mLocationUpdateRemover = LocationUpdateRemover.getInstance();
+		mLocationUpdateRemover.setContext(context);
+		
 		try {
 			if (Utils.servicesConnected(context)) {
-				Log.d(TAG, "Start updating location and activity");
-				Utils.log(new Date(), TAG, "Start updating location and activity");
-				mDetectionRequester.setUpdateTimeInterval(ActivityUtils.DAYTIME_DETECTION_INTERVAL_MILLISECONDS);
-				mDetectionRequester.requestUpdates();
-				mLocationUpdateRequester.setUpdateTimeInterval(LocationUtils.DAYTIME_UPDATE_INTERVAL_IN_MILLISECONDS);
-				mLocationUpdateRequester.requestUpdates();
+				if (intent.getAction().equals("START_UPDATE")) {
+					Log.d(TAG, "Start updating location and activity");
+					Utils.log(new Date(), TAG, "Start updating location and activity");
+					mDetectionRequester.setUpdateTimeInterval(ActivityUtils.DAYTIME_DETECTION_INTERVAL_MILLISECONDS);
+					mDetectionRequester.requestUpdates();
+					mLocationUpdateRequester.setUpdateTimeInterval(LocationUtils.DAYTIME_UPDATE_INTERVAL_IN_MILLISECONDS);
+					mLocationUpdateRequester.requestUpdates();
+				}
+				else if (intent.getAction().equals("STOP_UPDATE")) {
+					Log.d(TAG, "Stop updating location and activity");
+					Utils.log(new Date(), TAG, "Stop updating location and activity");
+					mDetectionRemover.removeUpdates(mDetectionRequester.getRequestPendingIntent());
+					mLocationUpdateRemover.removeUpdates(mLocationUpdateRequester.getRequestPendingIntent());
+				}
 			}
 		} catch (Exception e) {
 			Utils.log(new Date(), TAG, e.getMessage());
