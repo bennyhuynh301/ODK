@@ -68,12 +68,14 @@ public class MotionService extends Service implements SensorEventListener {
 	public void onSensorChanged(SensorEvent event) {
 		if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
 			float x,y,z;
+			long time;
 			x = event.values[0];
 			y = event.values[1];
 			z = event.values[2];
+			time = event.timestamp;
 			long current = System.currentTimeMillis();
 			if (current - lastUpdate > 2) {
-				logMotionResults(x,y,z);
+				logMotionResults(time,x,y,z);
 			}
 			lastUpdate = current;
 		}
@@ -84,10 +86,9 @@ public class MotionService extends Service implements SensorEventListener {
 		return null;
 	}
 	
-	private void logMotionResults(float x, float y, float z) {
-		long timeStamp = (new Date()).getTime();
+	private void logMotionResults(long time, float x, float y, float z) {
 		StringBuilder sb = new StringBuilder("{\"accel\":{");
-		sb.append("\"time\":").append(timeStamp).append(",");
+		sb.append("\"time\":").append(time).append(",");
 		sb.append("\"x\":").append(x).append(",");
 		sb.append("\"y\":").append(y).append(",");
 		sb.append("\"z\":").append(z);
