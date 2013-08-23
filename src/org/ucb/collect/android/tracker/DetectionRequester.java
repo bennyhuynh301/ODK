@@ -21,10 +21,13 @@ implements ConnectionCallbacks, OnConnectionFailedListener {
 	private PendingIntent mActivityRecognitionPendingIntent;
 	private ActivityRecognitionClient mActivityRecognitionClient;
 
-	public DetectionRequester(Context context) {
-		mContext = context;
+	public DetectionRequester() {
 		mActivityRecognitionPendingIntent = null;
         mActivityRecognitionClient = null;
+	}
+	
+	public void setContext(Context context) {
+		mContext = context;
 	}
 
 	public PendingIntent getRequestPendingIntent() {

@@ -18,9 +18,12 @@ public class LocationUpdateRemover  implements ConnectionCallbacks, OnConnection
 	private LocationClient mLocationClient;
 	private PendingIntent mCurrentIntent;
 	
-	public LocationUpdateRemover(Context context) {
-		mContext = context;
+	public LocationUpdateRemover() {
 		mLocationClient = null;
+	}
+	
+	public void setContext(Context context) {
+		mContext = context;
 	}
 
 	public void removeUpdates(PendingIntent requestIntent) {

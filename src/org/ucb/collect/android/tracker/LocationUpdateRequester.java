@@ -32,11 +32,14 @@ public class LocationUpdateRequester implements ConnectionCallbacks, OnConnectio
 	private LocationClient mLocationClient;
 	private LocationRequest mLocationRequest;
 	
-	public LocationUpdateRequester(Context context) {
-		mContext = context;
+	public LocationUpdateRequester() {
 		mLocationClient = null;
 		mUpdateLocationPendingIntent = null;
 		mLocationRequest = null;
+	}
+	
+	public void setContext(Context context) {
+		mContext = context;
 	}
 
 	public long getUpdateTimeInterval() {

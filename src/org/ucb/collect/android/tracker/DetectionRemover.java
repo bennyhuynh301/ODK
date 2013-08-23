@@ -19,9 +19,12 @@ implements ConnectionCallbacks, OnConnectionFailedListener {
 	private ActivityRecognitionClient mActivityRecognitionClient;
 	private PendingIntent mCurrentIntent;
 	
-	public DetectionRemover(Context context) {
-		mContext = context;
+	public DetectionRemover() {
         mActivityRecognitionClient = null;
+	}
+	
+	public void setContext(Context context) {
+		mContext = context;
 	}
 
 	public void removeUpdates(PendingIntent requestIntent) {
