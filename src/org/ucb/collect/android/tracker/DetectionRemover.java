@@ -7,10 +7,8 @@ import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallback
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
 import com.google.android.gms.location.ActivityRecognitionClient;
 
-import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.IntentSender.SendIntentException;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -20,22 +18,10 @@ implements ConnectionCallbacks, OnConnectionFailedListener {
 	private Context mContext;
 	private ActivityRecognitionClient mActivityRecognitionClient;
 	private PendingIntent mCurrentIntent;
-
-	private static DetectionRemover instance = null;
-
-	public static DetectionRemover getInstance() {
-		if (instance == null) {
-			instance = new DetectionRemover();
-		}
-		return instance;
-	}
-
-	private DetectionRemover() {
-		mActivityRecognitionClient = null;
-	}
 	
-	public void setContext(Context context) {
+	public DetectionRemover(Context context) {
 		mContext = context;
+        mActivityRecognitionClient = null;
 	}
 
 	public void removeUpdates(PendingIntent requestIntent) {

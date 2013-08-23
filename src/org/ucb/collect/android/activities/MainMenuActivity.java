@@ -113,7 +113,8 @@ public class MainMenuActivity extends Activity {
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
 	    Editor editor = pref.edit();
 	    editor.putBoolean("IsTrigger", false); 
-	    editor.putLong("LastTriggerTime", (new Date()).getTime());   
+	    editor.putLong("LastTriggerTime", (new Date()).getTime());
+	    editor.putInt("NumberOfAccelUpdates", 4);
 	    editor.commit(); 
 
 		//start background service
@@ -121,8 +122,13 @@ public class MainMenuActivity extends Activity {
 		// start the tracker service in the background
 		startService(new Intent(MainMenuActivity.this, org.ucb.collect.android.tracker.TrackerMainService.class));
 		// start the motion service
-		//startService(new Intent(MainMenuActivity.this, org.ucb.collect.android.tracker.MotionService.class));
-
+		if (((new Date()).getTime() - pref.getLong("LastTriggerTime", 0)) > 24*60*60*1000) {
+			editor.putInt("NumberOfAccelUpdates", 4);
+			editor.commit();
+		}
+		if (pref.getInt("NumberOfAccelUpdates", 4) > 0) {
+			startService(new Intent(MainMenuActivity.this, org.ucb.collect.android.tracker.MotionService.class));
+		}
 		// must be at the beginning of any activity that can be called from an
 		// external intent
 		Log.i(t, "Starting up, creating directories");
@@ -273,7 +279,7 @@ public class MainMenuActivity extends Activity {
 			Button start_tracker_btn = new Button(this);
 			start_tracker_btn.setText("Start Tracker");
 			start_tracker_btn.setLayoutParams(new LayoutParams(
-					ViewGroup.LayoutParams.WRAP_CONTENT,
+					ViewGroup.LayoutParams.MATCH_PARENT,
 					ViewGroup.LayoutParams.WRAP_CONTENT));
 			layout.addView(start_tracker_btn);
 			start_tracker_btn.setOnClickListener(new View.OnClickListener() {
@@ -286,7 +292,7 @@ public class MainMenuActivity extends Activity {
 			Button stop_tracker_btn = new Button(this);
 			stop_tracker_btn.setText("Stop Tracker");
 			stop_tracker_btn.setLayoutParams(new LayoutParams(
-					ViewGroup.LayoutParams.WRAP_CONTENT,
+					ViewGroup.LayoutParams.MATCH_PARENT,
 					ViewGroup.LayoutParams.WRAP_CONTENT));
 			layout.addView(stop_tracker_btn);
 			stop_tracker_btn.setOnClickListener(new View.OnClickListener() {
@@ -299,7 +305,7 @@ public class MainMenuActivity extends Activity {
 			Button start_trigger_btn = new Button(this);
 			start_trigger_btn.setText("Start Trigger");
 			start_trigger_btn.setLayoutParams(new LayoutParams(
-					ViewGroup.LayoutParams.WRAP_CONTENT,
+					ViewGroup.LayoutParams.MATCH_PARENT,
 					ViewGroup.LayoutParams.WRAP_CONTENT));
 			layout.addView(start_trigger_btn);
 			start_trigger_btn.setOnClickListener(new View.OnClickListener() {
@@ -312,7 +318,7 @@ public class MainMenuActivity extends Activity {
 			Button stop_trigger_btn = new Button(this);
 			stop_trigger_btn.setText("Stop Trigger");
 			stop_trigger_btn.setLayoutParams(new LayoutParams(
-					ViewGroup.LayoutParams.WRAP_CONTENT,
+					ViewGroup.LayoutParams.MATCH_PARENT,
 					ViewGroup.LayoutParams.WRAP_CONTENT));
 			layout.addView(stop_trigger_btn);
 			stop_trigger_btn.setOnClickListener(new View.OnClickListener() {
@@ -379,6 +385,15 @@ public class MainMenuActivity extends Activity {
 	protected void onStart() {
 		super.onStart();
 		Collect.getInstance().getActivityLogger().logOnStart(this);
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+	    Editor editor = pref.edit();
+		if (((new Date()).getTime() - pref.getLong("LastTriggerTime", 0)) > 24*60*60*1000) {
+			editor.putInt("NumberOfAccelUpdates", 4);
+			editor.commit();
+		}
+		if (pref.getInt("NumberOfAccelUpdates", 4) > 0) {
+			startService(new Intent(MainMenuActivity.this, org.ucb.collect.android.tracker.MotionService.class));
+		}
 	}
 
 	@Override

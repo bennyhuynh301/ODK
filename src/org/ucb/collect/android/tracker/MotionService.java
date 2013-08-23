@@ -10,12 +10,15 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Environment;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class MotionService extends Service implements SensorEventListener {
@@ -26,6 +29,11 @@ public class MotionService extends Service implements SensorEventListener {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+		Editor editor = pref.edit();
+		int left = pref.getInt("NumberOfAccelUpdates", 4) - 1;
+		editor.putInt("NumberOfAccelUpdates", left);
+		editor.commit();
 		return Service.START_STICKY;
 	}
 

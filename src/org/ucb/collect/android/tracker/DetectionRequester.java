@@ -7,11 +7,9 @@ import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallback
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
 import com.google.android.gms.location.ActivityRecognitionClient;
 
-import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentSender.SendIntentException;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -23,23 +21,10 @@ implements ConnectionCallbacks, OnConnectionFailedListener {
 	private PendingIntent mActivityRecognitionPendingIntent;
 	private ActivityRecognitionClient mActivityRecognitionClient;
 
-	private static DetectionRequester instance = null;
-
-	public static DetectionRequester getInstance() {
-		if (instance == null) {
-			instance = new DetectionRequester();
-		}
-		return instance;
-	}
-
-	private DetectionRequester() {
-		mActivityRecognitionPendingIntent = null;
-		mActivityRecognitionClient = null;
-		timeUpdateInterval = ActivityUtils.NIGHTTIME_DETECTION_INTERVAL_MILLISECONDS;
-	}
-	
-	public void setContext(Context context) {
+	public DetectionRequester(Context context) {
 		mContext = context;
+		mActivityRecognitionPendingIntent = null;
+        mActivityRecognitionClient = null;
 	}
 
 	public PendingIntent getRequestPendingIntent() {

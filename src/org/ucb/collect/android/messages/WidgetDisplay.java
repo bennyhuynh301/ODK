@@ -22,10 +22,12 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 public class WidgetDisplay extends AppWidgetProvider {
 	
+	private static final String TAG = "WidgetDisplay";
 	private static final String ACTION_WIDGET_CLICK = "Widget_Clickable";
 
     @Override
@@ -38,6 +40,7 @@ public class WidgetDisplay extends AppWidgetProvider {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
         views.setOnClickPendingIntent(R.id.widget_layout, pendingIntent);
+        appWidgetManager.updateAppWidget(appWidgetIds, views);
     }
 
     private class MyTime extends TimerTask {
@@ -64,7 +67,9 @@ public class WidgetDisplay extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
     	super.onReceive(context, intent);
+    	Log.d(TAG, "Widget is onReceived");
     	if (intent.getAction().equals(ACTION_WIDGET_CLICK)) {
+    		Log.d(TAG, "Widget is onClicked");
     		AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
             RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
             ComponentName thisWidget = new ComponentName(context, WidgetDisplay.class);

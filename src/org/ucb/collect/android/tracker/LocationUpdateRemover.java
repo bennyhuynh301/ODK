@@ -2,10 +2,8 @@ package org.ucb.collect.android.tracker;
 
 import java.util.Date;
 
-import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
-import android.content.IntentSender.SendIntentException;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -19,22 +17,10 @@ public class LocationUpdateRemover  implements ConnectionCallbacks, OnConnection
 	private Context mContext;
 	private LocationClient mLocationClient;
 	private PendingIntent mCurrentIntent;
-
-	private static LocationUpdateRemover instance = null;
-
-	public static LocationUpdateRemover getInstance() {
-		if (instance == null) {
-			instance = new LocationUpdateRemover();
-		}
-		return instance;
-	}
-
-	private LocationUpdateRemover() {
-		mLocationClient = null;
-	}
 	
-	public void setContext(Context context) {
+	public LocationUpdateRemover(Context context) {
 		mContext = context;
+		mLocationClient = null;
 	}
 
 	public void removeUpdates(PendingIntent requestIntent) {

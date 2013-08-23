@@ -4,12 +4,11 @@ import java.util.Date;
 
 import org.ucb.collect.android.R;
 
-import android.app.Activity;
+
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentSender.SendIntentException;
 import android.location.LocationManager;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -32,25 +31,12 @@ public class LocationUpdateRequester implements ConnectionCallbacks, OnConnectio
 	private PendingIntent mUpdateLocationPendingIntent;
 	private LocationClient mLocationClient;
 	private LocationRequest mLocationRequest;
-
-	private static LocationUpdateRequester instance = null;
-
-	public static LocationUpdateRequester getInstance() {
-		if (instance == null) {
-			instance = new LocationUpdateRequester();
-		}
-		return instance;
-	}
-
-	private LocationUpdateRequester() {
-		mUpdateLocationPendingIntent = null;
-		mLocationClient = null;
-		mLocationRequest = null;
-		timeUpdateInterval = LocationUtils.NIGHTTIME_UPDATE_INTERVAL_IN_MILLISECONDS;	
-	}
-
-	public void setContext(Context context) {
+	
+	public LocationUpdateRequester(Context context) {
 		mContext = context;
+		mLocationClient = null;
+		mUpdateLocationPendingIntent = null;
+		mLocationRequest = null;
 	}
 
 	public long getUpdateTimeInterval() {

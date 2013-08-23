@@ -117,6 +117,7 @@ public class UploadDataService extends Service {
 	}
 	
 	private String post(String user, String phoneID) {
+		File zipFile = null;
 		try {
 			HttpClient httpClient = new DefaultHttpClient();
 			HttpPost httpPost = new HttpPost(SERVER_URI);
@@ -129,7 +130,7 @@ public class UploadDataService extends Service {
 
 			ArrayList<File> files = new ArrayList<File>();
 			
-			if (trackerFile.exists()) {
+			if (trackerFile.exists()) {	
 				files.add(trackerFile);
 				if (accelFile.exists()) {
 					files.add(accelFile);
@@ -142,7 +143,7 @@ public class UploadDataService extends Service {
 				Log.d(TAG, "Zip File:" + zipPath);
 				Utils.log(new Date(), TAG, "Zip File:" + zipPath);
 				
-				File zipFile = new File(zipPath);
+				zipFile = new File(zipPath);
 				double zipLength = zipFile.length()/1024;
 				Log.d(TAG, "Zip size: " + zipLength + "KB");
 				Utils.log(new Date(), TAG, "Zip size: " + zipLength + "KB");
@@ -169,8 +170,15 @@ public class UploadDataService extends Service {
 				}
 			}
 		} catch (Exception e) {
+			Log.d(TAG, e.getMessage());
 			Utils.log(new Date(), TAG, e.getMessage());
 			e.printStackTrace();
+			boolean isDeleted = true;
+			if (zipFile != null) {
+				isDeleted = zipFile.delete();
+			}
+			Log.d(TAG, "Zipfile is deleted:" + isDeleted);
+			Utils.log(new Date(), TAG, "Zipfile is deleted:" + isDeleted);
 			return "FAILURE";
 		}
 		return "UNKNOWN";

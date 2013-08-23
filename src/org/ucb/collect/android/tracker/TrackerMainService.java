@@ -28,6 +28,10 @@ public class TrackerMainService extends Service {
 	private final int randomMin = (int) (Math.random()*60);
 	private final int randomSecond = (int) (Math.random()*60);
 	
+	private AlarmManager am;
+	private PendingIntent uploadSender;
+	
+	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Log.d(TAG, "Start main service");
@@ -57,10 +61,10 @@ public class TrackerMainService extends Service {
 		Log.d(TAG, "Upload Time: " + onUploadTime.getTime());
 		Utils.log(new Date(), TAG, "Upload Time: " + onUploadTime.getTime());
 		
-		AlarmManager am = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+		am = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
 		Intent uploadIntent = new Intent(this, UploadReceiver.class);
 		uploadIntent.putExtra("RESP", "UPLOAD");
-		PendingIntent uploadSender = PendingIntent.getBroadcast(this,(int) System.currentTimeMillis(),uploadIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+		uploadSender = PendingIntent.getBroadcast(this,(int) System.currentTimeMillis(),uploadIntent,PendingIntent.FLAG_UPDATE_CURRENT);
 		am.setRepeating(AlarmManager.RTC_WAKEUP, onUploadTime.getTimeInMillis(), AlarmManager.INTERVAL_DAY, uploadSender);
 	}
 	
@@ -69,6 +73,7 @@ public class TrackerMainService extends Service {
 		Log.d(TAG, "Destroy main service");
 		Utils.log(new Date(), TAG, "Destroy main service");
 		super.onDestroy();
+		am.cancel(uploadSender);
 		Intent stopUpdate = new Intent(this, UpdateReceiver.class);
 		stopUpdate.setAction("STOP_UPDATE");
 		this.sendBroadcast(stopUpdate);

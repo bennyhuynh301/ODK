@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 
@@ -57,6 +58,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.graphics.Color;
 //import android.graphics.drawable.BitmapDrawable;
@@ -1962,6 +1964,8 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 		}
 
 		super.onPause();
+		Log.d("FormEntryActivity", "Activity is onPause");
+		stopService(new Intent(this, org.ucb.collect.android.tracker.MotionService.class));
 	}
 
 	@Override
@@ -2513,12 +2517,25 @@ public class FormEntryActivity extends Activity implements AnimationListener,
 	protected void onStart() {
 		super.onStart();
 		Collect.getInstance().getActivityLogger().logOnStart(this);
+		Log.d("FormEntryActivity", "Activity is onStart");
+		//Start to collect the accel data
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+	    Editor editor = pref.edit();
+		if (((new Date()).getTime() - pref.getLong("LastTriggerTime", 0)) > 24*60*60*1000) {
+			editor.putInt("NumberOfAccelUpdates", 4);
+			editor.commit();
+		}
+		if (pref.getInt("NumberOfAccelUpdates", 4) > 0) {
+			startService(new Intent(this, org.ucb.collect.android.tracker.MotionService.class));
+		}
 	}
 
 	@Override
 	protected void onStop() {
 		Collect.getInstance().getActivityLogger().logOnStop(this);
 		super.onStop();
+		Log.d("FormEntryActivity", "Activity is onStop");
+		stopService(new Intent(this, org.ucb.collect.android.tracker.MotionService.class));
 	}
 
 	private void sendSavedBroadcast() {

@@ -12,16 +12,10 @@ public class UpdateReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		DetectionRequester mDetectionRequester = DetectionRequester.getInstance();
-		mDetectionRequester.setContext(context);
-		LocationUpdateRequester mLocationUpdateRequester = LocationUpdateRequester.getInstance();
-		mLocationUpdateRequester.setContext(context);
-		
-		DetectionRemover mDetectionRemover = DetectionRemover.getInstance();
-		mDetectionRemover.setContext(context);
-		LocationUpdateRemover mLocationUpdateRemover = LocationUpdateRemover.getInstance();
-		mLocationUpdateRemover.setContext(context);
-		
+		DetectionRequester mDetectionRequester = new DetectionRequester(context);
+		LocationUpdateRequester mLocationUpdateRequester = new LocationUpdateRequester(context);
+		DetectionRemover mDetectionRemover = new DetectionRemover(context);
+		LocationUpdateRemover mLocationUpdateRemover = new LocationUpdateRemover(context);
 		try {
 			if (Utils.servicesConnected(context)) {
 				if (intent.getAction().equals("START_UPDATE")) {
@@ -35,8 +29,14 @@ public class UpdateReceiver extends BroadcastReceiver {
 				else if (intent.getAction().equals("STOP_UPDATE")) {
 					Log.d(TAG, "Stop updating location and activity");
 					Utils.log(new Date(), TAG, "Stop updating location and activity");
-					mDetectionRemover.removeUpdates(mDetectionRequester.getRequestPendingIntent());
-					mLocationUpdateRemover.removeUpdates(mLocationUpdateRequester.getRequestPendingIntent());
+					if (mDetectionRequester.getRequestPendingIntent() != null) {
+						mDetectionRemover.removeUpdates(mDetectionRequester.getRequestPendingIntent());
+						mDetectionRequester.getRequestPendingIntent().cancel();
+					}
+					if (mLocationUpdateRequester.getRequestPendingIntent() != null) {
+						mLocationUpdateRemover.removeUpdates(mLocationUpdateRequester.getRequestPendingIntent());
+						mLocationUpdateRequester.getRequestPendingIntent().cancel();
+					}
 				}
 			}
 		} catch (Exception e) {
