@@ -74,6 +74,7 @@ public class TrackerMainService extends Service {
 		Utils.log(new Date(), TAG, "Destroy main service");
 		super.onDestroy();
 		am.cancel(uploadSender);
+		uploadSender.cancel();
 		Intent stopUpdate = new Intent(this, UpdateReceiver.class);
 		stopUpdate.setAction("STOP_UPDATE");
 		this.sendBroadcast(stopUpdate);

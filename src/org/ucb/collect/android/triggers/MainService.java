@@ -64,7 +64,9 @@ public class MainService extends Service {
 		Log.d(TAG, "MainService is destroyed");
 		super.onDestroy();
 		cron.cancel(pDownloadRequest);
+		pDownloadRequest.cancel();
 		cron.cancel(pTimeTrigger);
+		pTimeTrigger.cancel();
 	}
 	
 	@Override
