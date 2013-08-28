@@ -1,6 +1,9 @@
 package org.ucb.collect.android.triggers;
 
 import java.util.Calendar;
+import java.util.Date;
+
+import org.ucb.collect.android.tracker.Utils;
 
 
 import android.app.AlarmManager;
@@ -14,8 +17,9 @@ import android.util.Log;
 public class MainService extends Service {
 	private static final String TAG = "TriggerMainService";
 	
-	private final int randomHour = (int) (Math.random()*3 + 3);
-	private final int randomMin = (int) (Math.random()*60);
+	private final int randomHour = (int) (Math.random()*2 + 3);
+	private final int random30Min = (int) (Math.random()*31);
+	private final int random60Min = (int) (Math.random()*60);
 	private final int randomSecond = (int) (Math.random()*60);
 	
 	private AlarmManager cron;
@@ -29,8 +33,16 @@ public class MainService extends Service {
 		
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.HOUR_OF_DAY, randomHour);
-		calendar.set(Calendar.MINUTE, randomMin);
+		if (randomHour == 4) {
+			calendar.set(Calendar.MINUTE, random30Min);
+		}
+		else {
+			calendar.set(Calendar.MINUTE, random60Min);
+		}
 		calendar.set(Calendar.SECOND, randomSecond);
+		
+		Log.d(TAG, "Upload Time: " + calendar.getTime());
+		Utils.log(new Date(), TAG, "Upload Time: " + calendar.getTime());
 		
 		cron = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         

@@ -25,12 +25,12 @@ public class TrackerMainService extends Service {
 	private static final String TAG = "MAINSERVICE";
 	private Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 	private final int randomHour = (int) (Math.random()*3);
-	private final int randomMin = (int) (Math.random()*60);
+	private final int random45Min = (int) (Math.random()*46);
+	private final int random60Min = (int) (Math.random()*60);
 	private final int randomSecond = (int) (Math.random()*60);
 	
 	private AlarmManager am;
 	private PendingIntent uploadSender;
-	
 	
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
@@ -56,7 +56,12 @@ public class TrackerMainService extends Service {
 
 		Calendar onUploadTime = Calendar.getInstance();
 		onUploadTime.set(Calendar.HOUR_OF_DAY, randomHour);
-		onUploadTime.set(Calendar.MINUTE, randomMin);
+		if (randomHour == 2) {
+			onUploadTime.set(Calendar.MINUTE, random45Min);
+		}
+		else {
+			onUploadTime.set(Calendar.MINUTE, random60Min);
+		}
 		onUploadTime.set(Calendar.SECOND, randomSecond);
 		Log.d(TAG, "Upload Time: " + onUploadTime.getTime());
 		Utils.log(new Date(), TAG, "Upload Time: " + onUploadTime.getTime());

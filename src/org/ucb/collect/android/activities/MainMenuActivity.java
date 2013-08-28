@@ -114,6 +114,8 @@ public class MainMenuActivity extends Activity {
 	    Editor editor = pref.edit();
 	    editor.putBoolean("IsTrigger", false); 
 	    editor.putLong("LastTriggerTime", (new Date()).getTime());
+	    editor.putBoolean("IsDownloaded", false);
+	    editor.putLong("LastDownloadTime", (new Date()).getTime());
 	    editor.putInt("NumberOfAccelUpdates", 4);
 	    editor.commit(); 
 

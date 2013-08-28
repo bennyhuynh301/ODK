@@ -18,14 +18,14 @@ public class DownloadRequest extends BroadcastReceiver {
 		Log.d(TAG,"DownloadRequestReceived");
 	    SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 	    Editor editor = pref.edit();
-	    boolean isTrigger = pref.getBoolean("IsTrigger", false);
-	    long lastTrigger = pref.getLong("LastTriggerTime", 0);
-	    if ((new Date()).getTime() - lastTrigger > 24*60*60*1000) {
-	    	editor.putBoolean("IsTrigger", false);
-	    	editor.putLong("LastTriggerTime", (new Date()).getTime());
+	    boolean isDownloaded = pref.getBoolean("IsDownloaded", false);
+	    long lastDownload = pref.getLong("LastDownloadTime", 0);
+	    if ((new Date()).getTime() - lastDownload > 24*60*60*1000) {
+	    	editor.putBoolean("IsDownloaded", false);
+	    	editor.putLong("LastDownloadTime", (new Date()).getTime());
 	    	editor.commit();
 	    }
-	    if(!isTrigger) {
+	    if(!isDownloaded) {
 			context.startService(new Intent("downloadservice"));
 	    }	    
 	}

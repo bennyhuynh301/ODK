@@ -67,7 +67,7 @@ FormDownloaderListener, DeleteFormsListener {
 	    			Log.d(TAG, "hasInternet True");
 	    			fetchingForms();	
 	    			SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
-	    			editor.putBoolean("IsTrigger", true);
+	    			editor.putBoolean("IsDownloaded", true);
 	    			editor.commit();
 	    		}else{
 	    			Log.d(TAG, "DownloadServiceRetry NO_INTERNET");

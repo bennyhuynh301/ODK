@@ -76,6 +76,9 @@ public class SetTimeTriggerService extends Service {
 	    					am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pi);
 	    				}
 	    		}
+	    		SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
+    			editor.putBoolean("IsTrigger", true);
+    			editor.commit();
 	    		stopSelf();
 	    		break;
 	    	default:
