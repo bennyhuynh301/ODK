@@ -10,8 +10,8 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.ucb.collect.android"
-    android:versionCode="1024"
-    android:versionName="1.3" >
+    android:versionCode="1025"
+    android:versionName="1.4" >
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
