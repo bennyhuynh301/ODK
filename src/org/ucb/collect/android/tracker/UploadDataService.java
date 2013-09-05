@@ -101,6 +101,9 @@ public class UploadDataService extends Service {
 				Log.d(TAG, "Upload fails. Retry....");
 				Utils.log(new Date(), TAG, "Upload fails. Retry....");
 				Utils.retryLater(context,SetTimeTrigger.class, 3600);
+				Intent respIntent = new Intent(context, UploadReceiver.class);
+				respIntent.putExtra("RESP", response);
+				context.sendBroadcast(respIntent);
 			}
 			else if (response.equals("SUCCESS")) {
 				File trackerFile = new File(Environment.getExternalStorageDirectory(), TRACKER_FILE);
@@ -184,7 +187,7 @@ public class UploadDataService extends Service {
 			Utils.log(new Date(), TAG, "Zipfile is deleted:" + isDeleted);
 			return "FAILURE";
 		}
-		return "UNKNOWN";
+		return "FAILURE";
 	}
 
 	private String zipFile(ArrayList<File> files) {

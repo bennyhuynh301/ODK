@@ -33,7 +33,7 @@ public class UploadReceiver extends BroadcastReceiver {
 			}
 		}
 
-		else if (b != null && b.getString("RESP").equals("SUCCESS")) {
+		else if (b != null && (b.getString("RESP").equals("SUCCESS") || b.getString("RESP").equals("FAILURE"))) {
 			Log.d(TAG, b.getString("RESP"));
 			Utils.log(new Date(), TAG, b.getString("RESP"));
 			Intent startUpdate = new Intent(context, UpdateReceiver.class);
