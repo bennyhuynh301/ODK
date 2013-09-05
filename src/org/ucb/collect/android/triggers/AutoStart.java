@@ -16,6 +16,7 @@ public class AutoStart extends BroadcastReceiver {
 		Log.d(TAG,"AutoStartReceived");
 		Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
 		editor.putBoolean("IsTrigger", false);
+		editor.putBoolean("IsDownloaded", false);
 		editor.commit();
 		context.startService(new Intent(context, MainService.class));
 	}

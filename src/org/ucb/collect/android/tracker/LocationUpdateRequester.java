@@ -130,7 +130,7 @@ public class LocationUpdateRequester implements ConnectionCallbacks, OnConnectio
 
 		builder.setContentTitle("Travel Quality Study")
 		.setContentText("Please make sure Location Service is enabled.")
-		.setSmallIcon(R.drawable.study_logo)
+		.setSmallIcon(R.drawable.exclamation)
 		.setContentIntent(getContentIntent())
 		.setSound(sound)
 		.setAutoCancel(true);

@@ -116,6 +116,7 @@ public class MainMenuActivity extends Activity {
 	    editor.putLong("LastTriggerTime", (new Date()).getTime());
 	    editor.putBoolean("IsDownloaded", false);
 	    editor.putLong("LastDownloadTime", (new Date()).getTime());
+	    editor.putLong("LastAccelTime", (new Date()).getTime());
 	    editor.putInt("NumberOfAccelUpdates", 4);
 	    editor.commit(); 
 
@@ -124,7 +125,8 @@ public class MainMenuActivity extends Activity {
 		// start the tracker service in the background
 		startService(new Intent(MainMenuActivity.this, org.ucb.collect.android.tracker.TrackerMainService.class));
 		// start the motion service
-		if (((new Date()).getTime() - pref.getLong("LastTriggerTime", 0)) > 24*60*60*1000) {
+		if (((new Date()).getTime() - pref.getLong("LastAccelTime", 0)) > 24*60*60*1000) {
+			editor.putLong("LastAccelTime", (new Date()).getTime());
 			editor.putInt("NumberOfAccelUpdates", 4);
 			editor.commit();
 		}

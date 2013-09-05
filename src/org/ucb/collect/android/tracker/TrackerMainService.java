@@ -22,16 +22,17 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 public class TrackerMainService extends Service {
+	private boolean DEBUG = true;
 	private static final String TAG = "MAINSERVICE";
 	private Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 	private final int randomHour = (int) (Math.random()*3);
 	private final int random45Min = (int) (Math.random()*46);
 	private final int random60Min = (int) (Math.random()*60);
 	private final int randomSecond = (int) (Math.random()*60);
-	
+
 	private AlarmManager am;
 	private PendingIntent uploadSender;
-	
+
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Log.d(TAG, "Start main service");
@@ -42,37 +43,48 @@ public class TrackerMainService extends Service {
 		this.sendBroadcast(updateIntent);
 		return Service.START_STICKY;
 	}
-	
+
 	@Override
 	public void onCreate() {
-		Log.d(TAG, "Create main service");
-		Utils.log(new Date(), TAG, "Create main service");
 		super.onCreate();
-		
 		File travelStudyFolder = new File(Environment.getExternalStorageDirectory(), "Travel_Study");
 		if (!travelStudyFolder.exists()) {
 			travelStudyFolder.mkdir();
 		}
-
-		Calendar onUploadTime = Calendar.getInstance();
-		onUploadTime.set(Calendar.HOUR_OF_DAY, randomHour);
-		if (randomHour == 2) {
-			onUploadTime.set(Calendar.MINUTE, random45Min);
+		
+		Log.d(TAG, "Create main service");	
+		Utils.log(new Date(), TAG, "Create main service");
+		
+		if (DEBUG) {
+			Calendar onUploadTime = Calendar.getInstance();
+			Log.d(TAG, "Upload Time: " + onUploadTime.getTime());
+			am = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+			Intent uploadIntent = new Intent(this, UploadReceiver.class);
+			uploadIntent.putExtra("RESP", "UPLOAD");
+			uploadSender = PendingIntent.getBroadcast(this,(int) System.currentTimeMillis(),uploadIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+			am.setRepeating(AlarmManager.RTC_WAKEUP, onUploadTime.getTimeInMillis(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, uploadSender);
 		}
 		else {
-			onUploadTime.set(Calendar.MINUTE, random60Min);
+			Calendar onUploadTime = Calendar.getInstance();
+			onUploadTime.set(Calendar.HOUR_OF_DAY, randomHour);
+			if (randomHour == 2) {
+				onUploadTime.set(Calendar.MINUTE, random45Min);
+			}
+			else {
+				onUploadTime.set(Calendar.MINUTE, random60Min);
+			}
+			onUploadTime.set(Calendar.SECOND, randomSecond);
+			Log.d(TAG, "Upload Time: " + onUploadTime.getTime());
+			Utils.log(new Date(), TAG, "Upload Time: " + onUploadTime.getTime());
+
+			am = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+			Intent uploadIntent = new Intent(this, UploadReceiver.class);
+			uploadIntent.putExtra("RESP", "UPLOAD");
+			uploadSender = PendingIntent.getBroadcast(this,(int) System.currentTimeMillis(),uploadIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+			am.setRepeating(AlarmManager.RTC_WAKEUP, onUploadTime.getTimeInMillis(), AlarmManager.INTERVAL_DAY, uploadSender);
 		}
-		onUploadTime.set(Calendar.SECOND, randomSecond);
-		Log.d(TAG, "Upload Time: " + onUploadTime.getTime());
-		Utils.log(new Date(), TAG, "Upload Time: " + onUploadTime.getTime());
-		
-		am = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-		Intent uploadIntent = new Intent(this, UploadReceiver.class);
-		uploadIntent.putExtra("RESP", "UPLOAD");
-		uploadSender = PendingIntent.getBroadcast(this,(int) System.currentTimeMillis(),uploadIntent,PendingIntent.FLAG_UPDATE_CURRENT);
-		am.setRepeating(AlarmManager.RTC_WAKEUP, onUploadTime.getTimeInMillis(), AlarmManager.INTERVAL_DAY, uploadSender);
 	}
-	
+
 	@Override
 	public void onDestroy() {
 		Log.d(TAG, "Destroy main service");
@@ -84,12 +96,12 @@ public class TrackerMainService extends Service {
 		stopUpdate.setAction("STOP_UPDATE");
 		this.sendBroadcast(stopUpdate);
 	}
-	
+
 	@Override
 	public IBinder onBind(Intent arg0) {
 		return null;
 	}
-	
+
 	private void checkWifi() {
 		WifiManager wm = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 		if (wm != null && wm.isWifiEnabled()) {
@@ -100,14 +112,14 @@ public class TrackerMainService extends Service {
 			sendWiFiNotification();
 		}
 	}
-	
+
 	private void sendWiFiNotification() {
 		NotificationCompat.Builder builder =
 				new NotificationCompat.Builder(getApplicationContext());
 
 		builder.setContentTitle("Travel Quality Study")
 		.setContentText("Please make sure Wifi is enabled.")
-		.setSmallIcon(R.drawable.study_logo)
+		.setSmallIcon(R.drawable.exclamation)
 		.setContentIntent(getContentIntent("WIFI"))
 		.setSound(sound)
 		.setAutoCancel(true);

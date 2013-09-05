@@ -47,7 +47,7 @@ public class ConnectivityBroadcastReceiver extends BroadcastReceiver {
 
 		builder.setContentTitle("Travel Quality Study")
 		.setContentText("Please make sure mobile data is enabled.")
-		.setSmallIcon(R.drawable.study_logo)
+		.setSmallIcon(R.drawable.exclamation)
 		.setContentIntent(getContentIntent())
 		.setSound(sound)
 		.setAutoCancel(true);

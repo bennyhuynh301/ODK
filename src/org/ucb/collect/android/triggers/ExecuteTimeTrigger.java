@@ -25,7 +25,7 @@ public class ExecuteTimeTrigger extends BroadcastReceiver {
 		// TODO Auto-generated method stub
 		NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
 		
-		int icon = R.drawable.study_logo;
+		int icon = R.drawable.survey_alert;
 		CharSequence tickerText = "A friendly survey reminder";
 		long when = System.currentTimeMillis();
 		

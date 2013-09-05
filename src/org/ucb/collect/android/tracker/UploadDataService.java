@@ -62,6 +62,9 @@ public class UploadDataService extends Service {
 			Log.d(TAG,"UploadDataService NO_CONNECTION");
 			Utils.log(new Date(), TAG, "UploadDataService NO_CONNECTION");
 			Utils.retryLater(this,SetTimeTrigger.class, 3600);
+			Intent startUpdate = new Intent(this, UpdateReceiver.class);
+			startUpdate.setAction("START_UPDATE");
+			this.sendBroadcast(startUpdate);
 			stopSelf();
 			break;
 		case Utils.WAIT_FOR_WIFI:

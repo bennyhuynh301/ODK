@@ -13,6 +13,7 @@ import android.util.Log;
 
 //Set alarm notification for today only
 public class SetTimeTrigger extends BroadcastReceiver{
+	private boolean DEBUG = true;
 	private static final String TAG = "SetTimeTrigger";
 	
 	@Override
@@ -22,7 +23,14 @@ public class SetTimeTrigger extends BroadcastReceiver{
 		Editor editor = pref.edit();
 		boolean isTrigger = pref.getBoolean("IsTrigger", false);
 	    long lastTrigger = pref.getLong("LastTriggerTime", 0);
-	    if ((new Date()).getTime() - lastTrigger > 24*60*60*1000) {
+	    int interval;
+	    if (DEBUG) {
+	    	interval = 14*60*1000;
+	    }
+	    else {
+	    	interval = 23*60*60*1000;
+	    }
+	    if ((new Date()).getTime() - lastTrigger > interval) {
 	    	editor.putBoolean("IsTrigger", false);
 	    	editor.putLong("LastTriggerTime", (new Date()).getTime());
 	    	editor.commit();
