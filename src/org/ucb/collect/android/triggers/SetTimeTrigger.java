@@ -25,12 +25,12 @@ public class SetTimeTrigger extends BroadcastReceiver{
 	    long lastTrigger = pref.getLong("LastTriggerTime", 0);
 	    int interval;
 	    if (DEBUG) {
-	    	interval = 14*60*1000;
+	    	interval = 11*60*1000;
 	    }
 	    else {
-	    	interval = 23*60*60*1000;
+	    	interval = 20*60*60*1000;
 	    }
-	    if ((new Date()).getTime() - lastTrigger > interval) {
+	    if ((new Date()).getTime() - lastTrigger >= interval) {
 	    	editor.putBoolean("IsTrigger", false);
 	    	editor.putLong("LastTriggerTime", (new Date()).getTime());
 	    	editor.commit();

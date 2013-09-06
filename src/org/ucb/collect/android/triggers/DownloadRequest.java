@@ -28,7 +28,7 @@ public class DownloadRequest extends BroadcastReceiver {
 	    else {
 	    	interval = 23*60*60*1000;
 	    }
-	    if ((new Date()).getTime() - lastDownload > interval) {
+	    if ((new Date()).getTime() - lastDownload >= interval) {
 	    	editor.putBoolean("IsDownloaded", false);
 	    	editor.putLong("LastDownloadTime", (new Date()).getTime());
 	    	editor.commit();

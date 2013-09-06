@@ -14,7 +14,7 @@ public class StartMyServiceAtBootReceiver extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		Log.d(TAG, "StartMyServiceAtBootReceiver starts");
 		Utils.log(new Date(), TAG, "SetTimeReceived starts");
-		if (Intent.ACTION_MEDIA_MOUNTED.equals(intent.getAction())) {
+		if (Intent.ACTION_MEDIA_MOUNTED.equals(intent.getAction()) || Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction()) ) {
 			Intent mainService = new Intent(context, TrackerMainService.class);
 			context.startService(mainService);
 		}

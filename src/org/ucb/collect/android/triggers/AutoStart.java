@@ -13,11 +13,13 @@ public class AutoStart extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		Log.d(TAG,"AutoStartReceived");
-		Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
-		editor.putBoolean("IsTrigger", false);
-		editor.putBoolean("IsDownloaded", false);
-		editor.commit();
-		context.startService(new Intent(context, MainService.class));
+		if (Intent.ACTION_MEDIA_MOUNTED.equals(intent.getAction()) || Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction()) ) {
+			Log.d(TAG,"AutoStartReceived");
+			Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+			editor.putBoolean("IsTrigger", false);
+			editor.putBoolean("IsDownloaded", false);
+			editor.commit();
+			context.startService(new Intent(context, MainService.class));
+		}
 	}
 }
