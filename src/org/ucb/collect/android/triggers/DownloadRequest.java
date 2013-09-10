@@ -19,20 +19,20 @@ public class DownloadRequest extends BroadcastReceiver {
 		Log.d(TAG,"DownloadRequestReceived");
 	    SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 	    Editor editor = pref.edit();
-	    boolean isDownloaded = pref.getBoolean("IsDownloaded", false);
 	    long lastDownload = pref.getLong("LastDownloadTime", 0);
 	    int interval;
 	    if (DEBUG) {
-	    	interval = 14*60*1000;
+	    	interval = 11*60*1000;
 	    }
 	    else {
-	    	interval = 23*60*60*1000;
+	    	interval = 20*60*60*1000;
 	    }
 	    if ((new Date()).getTime() - lastDownload >= interval) {
 	    	editor.putBoolean("IsDownloaded", false);
 	    	editor.putLong("LastDownloadTime", (new Date()).getTime());
 	    	editor.commit();
 	    }
+	    boolean isDownloaded = pref.getBoolean("IsDownloaded", false);
 	    if(!isDownloaded) {
 			context.startService(new Intent("downloadservice"));
 	    }	    

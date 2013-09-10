@@ -21,7 +21,6 @@ public class SetTimeTrigger extends BroadcastReceiver{
 		Log.d(TAG,"SetTimeReceived");
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 		Editor editor = pref.edit();
-		boolean isTrigger = pref.getBoolean("IsTrigger", false);
 	    long lastTrigger = pref.getLong("LastTriggerTime", 0);
 	    int interval;
 	    if (DEBUG) {
@@ -35,6 +34,8 @@ public class SetTimeTrigger extends BroadcastReceiver{
 	    	editor.putLong("LastTriggerTime", (new Date()).getTime());
 	    	editor.commit();
 	    }
+
+	    boolean isTrigger = pref.getBoolean("IsTrigger", false);
 	    if(!isTrigger) {
 	    	context.startService(new Intent(context,SetTimeTriggerService.class));
 	    }
