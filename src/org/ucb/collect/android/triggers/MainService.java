@@ -15,7 +15,7 @@ import android.os.IBinder;
 import android.util.Log;
 
 public class MainService extends Service {
-	private boolean DEBUG = true;
+	private boolean DEBUG = false;
 	private static final String TAG = "TriggerMainService";
 	private final int randomHour = (int) (Math.random()*2 + 3);
 	private final int random30Min = (int) (Math.random()*31);

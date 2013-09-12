@@ -22,7 +22,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 public class TrackerMainService extends Service {
-	private boolean DEBUG = true;
+	private boolean DEBUG = false;
 	private static final String TAG = "MAINSERVICE";
 	private Uri sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 	private final int randomHour = (int) (Math.random()*3);

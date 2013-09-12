@@ -72,7 +72,7 @@ import android.widget.Toast;
 public class MainMenuActivity extends Activity {
 	private static final String t = "MainMenuActivity";
 
-	private boolean DEBUG_FLAG = true;
+	private boolean DEBUG_FLAG = false;
 
 	private static final int PASSWORD_DIALOG = 1;
 

@@ -13,7 +13,7 @@ import android.util.Log;
 
 //Set alarm notification for today only
 public class SetTimeTrigger extends BroadcastReceiver{
-	private boolean DEBUG = true;
+	private boolean DEBUG = false;
 	private static final String TAG = "SetTimeTrigger";
 	
 	@Override

@@ -11,7 +11,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class DownloadRequest extends BroadcastReceiver {
-	private boolean DEBUG = true;
+	private boolean DEBUG = false;
 	private static final String TAG = "DownloadRequest";
 	
 	@Override
