@@ -27,7 +27,7 @@ public class SetTimeTrigger extends BroadcastReceiver{
 	    	interval = 11*60*1000;
 	    }
 	    else {
-	    	interval = 20*60*60*1000;
+	    	interval = 12*60*60*1000;
 	    }
 	    if ((new Date()).getTime() - lastTrigger >= interval) {
 	    	editor.putBoolean("IsTrigger", false);

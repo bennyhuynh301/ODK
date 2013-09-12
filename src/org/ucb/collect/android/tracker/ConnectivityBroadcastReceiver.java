@@ -46,7 +46,7 @@ public class ConnectivityBroadcastReceiver extends BroadcastReceiver {
 				new NotificationCompat.Builder(mContext);
 
 		builder.setContentTitle("Travel Quality Study")
-		.setContentText("Please make sure mobile data is enabled.")
+		.setContentText("Please enable mobile data.")
 		.setSmallIcon(R.drawable.exclamation)
 		.setContentIntent(getContentIntent())
 		.setSound(sound)

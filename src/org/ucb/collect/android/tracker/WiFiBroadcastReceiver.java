@@ -39,7 +39,7 @@ public class WiFiBroadcastReceiver extends BroadcastReceiver {
 				new NotificationCompat.Builder(mContext);
 
 		builder.setContentTitle("Travel Quality Study")
-		.setContentText("Please make sure Wifi is enabled.")
+		.setContentText("Please enable Wifi.")
 		.setSmallIcon(R.drawable.exclamation)
 		.setContentIntent(getContentIntent())
 		.setSound(sound)

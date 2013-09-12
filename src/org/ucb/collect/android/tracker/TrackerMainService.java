@@ -118,7 +118,7 @@ public class TrackerMainService extends Service {
 				new NotificationCompat.Builder(getApplicationContext());
 
 		builder.setContentTitle("Travel Quality Study")
-		.setContentText("Please make sure Wifi is enabled.")
+		.setContentText("Please enable Wifi.")
 		.setSmallIcon(R.drawable.exclamation)
 		.setContentIntent(getContentIntent("WIFI"))
 		.setSound(sound)
