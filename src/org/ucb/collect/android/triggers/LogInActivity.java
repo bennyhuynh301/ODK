@@ -137,7 +137,7 @@ public class LogInActivity extends Activity implements OnClickListener {
 			NetworkInfo ni = connectivityManager.getActiveNetworkInfo();
 		    
 			if (ni == null || !ni.isConnected()){
-	        	throw new Exception("Could not connect to server. Please check whether you are connected to the internet.");
+	        	throw new Exception("Could not connect to server. Are you connected to the Internet? If this error persists, try logging in with only the mobile data connection on (Wifi temporarily off).");
 			}
 			HttpURLConnection urlConnection = null;
 			try {

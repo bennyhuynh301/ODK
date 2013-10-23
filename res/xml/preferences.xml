@@ -7,7 +7,7 @@
         android:title="@string/app_name" >
         <intent
             android:action="android.intent.action.VIEW"
-            android:data="http://sftravelstudy.berkeley.edu" />
+            android:data="sftravelstudy.berkeley.edu" />
     </PreferenceScreen>
 
     <PreferenceCategory
