@@ -232,6 +232,10 @@
         </service>
         <service android:name="org.ucb.collect.android.tracker.MotionService" >
         </service>
+        <service android:name="org.ucb.collect.android.tracker.TripRequestService" >
+        </service>
+        <service android:name="org.ucb.collect.android.tracker.PostTripService" >
+        </service>
 
         <receiver
             android:name="org.ucb.collect.android.tracker.UpdateReceiver"
@@ -274,7 +278,15 @@
             android:name="org.ucb.collect.android.tracker.MotionTrackerStopReceiver"
             android:process=":remote" >
         </receiver>
-
+        <receiver
+            android:name="org.ucb.collect.android.tracker.PostTripReceiver"
+            android:process=":remote" >
+        </receiver>
+        <receiver
+            android:name="org.ucb.collect.android.tracker.RequestTripsReceiver"
+            android:process=":remote" >
+        </receiver>
+        
         <activity
             android:name="org.ucb.collect.android.triggers.LogInActivity"
             android:label="@string/app_name" >

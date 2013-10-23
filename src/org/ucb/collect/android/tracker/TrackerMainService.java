@@ -29,9 +29,12 @@ public class TrackerMainService extends Service {
 	private final int random45Min = (int) (Math.random()*46);
 	private final int random60Min = (int) (Math.random()*60);
 	private final int randomSecond = (int) (Math.random()*60);
-
+	
+	private final int triggerHour = (int) (Math.random()*17 + 6);
+	
 	private AlarmManager am;
 	private PendingIntent uploadSender;
+	private PendingIntent requestTripSender;
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
@@ -62,7 +65,11 @@ public class TrackerMainService extends Service {
 			Intent uploadIntent = new Intent(this, UploadReceiver.class);
 			uploadIntent.putExtra("RESP", "UPLOAD");
 			uploadSender = PendingIntent.getBroadcast(this,(int) System.currentTimeMillis(),uploadIntent,PendingIntent.FLAG_UPDATE_CURRENT);
-			am.setRepeating(AlarmManager.RTC_WAKEUP, onUploadTime.getTimeInMillis(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, uploadSender);
+			am.setRepeating(AlarmManager.RTC_WAKEUP, onUploadTime.getTimeInMillis(), AlarmManager.INTERVAL_HALF_HOUR, uploadSender);
+			Log.d(TAG, "Trigger Request Trip Time: " + onUploadTime.getTime());
+			Intent requestTripIntent = new Intent(this, RequestTripsReceiver.class);
+			requestTripSender = PendingIntent.getBroadcast(this,(int) System.currentTimeMillis(), requestTripIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+			am.setRepeating(AlarmManager.RTC_WAKEUP, onUploadTime.getTimeInMillis()+60000, AlarmManager.INTERVAL_HALF_HOUR,requestTripSender);
 		}
 		else {
 			Calendar onUploadTime = Calendar.getInstance();
@@ -82,6 +89,17 @@ public class TrackerMainService extends Service {
 			uploadIntent.putExtra("RESP", "UPLOAD");
 			uploadSender = PendingIntent.getBroadcast(this,(int) System.currentTimeMillis(),uploadIntent,PendingIntent.FLAG_UPDATE_CURRENT);
 			am.setRepeating(AlarmManager.RTC_WAKEUP, onUploadTime.getTimeInMillis(), AlarmManager.INTERVAL_DAY, uploadSender);
+			
+			
+			Calendar triggerTime = Calendar.getInstance();
+			triggerTime.set(Calendar.HOUR_OF_DAY, triggerHour);
+			triggerTime.set(Calendar.MINUTE, random60Min);
+			triggerTime.set(Calendar.SECOND, randomSecond);			
+			Log.d(TAG, "Trigger Request Trip Time: " + triggerTime.getTime());
+			Utils.log(new Date(), TAG, "Trigger Request Trip Time: " + triggerTime.getTime());
+			Intent requestTripIntent = new Intent(this, RequestTripsReceiver.class);
+			requestTripSender = PendingIntent.getBroadcast(this,(int) System.currentTimeMillis(), requestTripIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+			am.setRepeating(AlarmManager.RTC_WAKEUP, triggerTime.getTimeInMillis(), AlarmManager.INTERVAL_DAY,requestTripSender);
 		}
 	}
 

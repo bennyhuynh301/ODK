@@ -3,7 +3,6 @@ package org.ucb.collect.android.tracker;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.Calendar;
-import java.util.Date;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;

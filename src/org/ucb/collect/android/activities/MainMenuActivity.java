@@ -116,6 +116,10 @@ public class MainMenuActivity extends Activity {
 	    editor.putLong("LastTriggerTime", (new Date()).getTime());
 	    editor.putBoolean("IsDownloaded", false);
 	    editor.putLong("LastDownloadTime", (new Date()).getTime());
+	    editor.putBoolean("IsUploaded", false);
+	    editor.putLong("LastUploadTime", (new Date().getTime()));
+	    editor.putBoolean("IsRequestTrip", false);
+	    editor.putLong("LastRequestTripTime", (new Date().getTime()));
 	    editor.putLong("LastAccelTime", (new Date()).getTime());
 	    editor.putInt("NumberOfAccelUpdates", 4);
 	    editor.commit(); 
