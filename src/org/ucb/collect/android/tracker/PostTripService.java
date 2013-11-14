@@ -25,7 +25,7 @@ import android.util.Log;
 
 public class PostTripService extends Service {
 	private static final String TAG = "PostTripService";
-	private static final String SERVER_URL= "http://184.169.166.200:61245/api/trips";
+	private static final String SERVER_URL= "http://TQS-LB-317129516.us-west-1.elb.amazonaws.com:61245/api/trips";
 
 	private PowerManager.WakeLock wakeLock;
 	private WifiManager.WifiLock wifiLock;
@@ -96,8 +96,8 @@ public class PostTripService extends Service {
 			else if (response.equals("SUCCESS")) {
 				Log.d(TAG, "Upload success. Done....");
 				Utils.log(new Date(), TAG, "Upload success. Done....");
-				//File f = new File(this.path);
-				//f.delete();
+				File f = new File(this.path);
+				f.delete();
 			}
 			return null;
 		}	

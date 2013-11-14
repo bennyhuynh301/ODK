@@ -27,7 +27,7 @@ public class UploadReceiver extends BroadcastReceiver {
 	    	interval = 11*60*1000;
 	    }
 	    else {
-	    	interval = 12*60*60*1000;
+	    	interval = 8*60*60*1000;
 	    }
 	    if ((new Date()).getTime() - lastUploadTime >= interval) {
 	    	editor.putBoolean("IsUploaded", false);

@@ -119,6 +119,11 @@
             android:key="showSplash"
             android:summary="@string/show_splash_summary"
             android:title="@string/show_splash" />
+        <CheckBoxPreference
+           android:id="@+id/notification"
+           android:defaultValue="true"
+           android:key="notification_preference"
+           android:title="Auto detect networks" />
         <PreferenceScreen
             android:id="@+id/splash_path"
             android:defaultValue="@string/default_splash_path"

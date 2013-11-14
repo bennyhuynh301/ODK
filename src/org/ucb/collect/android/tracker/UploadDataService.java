@@ -31,7 +31,7 @@ import android.util.Log;
 
 public class UploadDataService extends Service {
 	private static final String TAG = "UploadDataService";
-	private static final String SERVER_URI = "http://184.169.166.200:61245/api/traces";
+	private static final String SERVER_URI = "http://TQS-LB-317129516.us-west-1.elb.amazonaws.com:61245/api/traces";
 	private static final String TRACKER_FILE = "Travel_Study/data.txt";
 	private static final String ACCEL_FILE = "Travel_Study/data_accel.txt";
 	private static final String DEBUG_FILE = "Travel_Study/data_log.txt";

@@ -10,9 +10,11 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -31,7 +33,9 @@ public class ConnectivityBroadcastReceiver extends BroadcastReceiver {
 		if (noConnectivity) {
 			Log.d(TAG, "No connection");
 			Utils.log(new Date(), TAG, "No connection");
-			if (!isMobileDataEnabled()) {
+			SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(context);
+			boolean needNotification = myPref.getBoolean("notification_preference", true);
+			if (needNotification && !isMobileDataEnabled()) {
 				sendDataPlanNotification();
 			}
 		}

@@ -98,7 +98,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 	private CheckBoxPreference mAutosendWifiPreference;
 	private CheckBoxPreference mAutosendNetworkPreference;
 	private ListPreference mProtocolPreference;
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -121,6 +121,7 @@ public class PreferencesActivity extends PreferenceActivity implements
 				AdminPreferencesActivity.KEY_CHANGE_URL, false);
 
 		PreferenceCategory autosendCategory = (PreferenceCategory) findPreference(getString(R.string.autosend));
+				
 		mAutosendWifiPreference = (CheckBoxPreference) findPreference(KEY_AUTOSEND_WIFI);
 		boolean autosendWifiAvailable = adminPreferences.getBoolean(
 				AdminPreferencesActivity.KEY_AUTOSEND_WIFI, false);

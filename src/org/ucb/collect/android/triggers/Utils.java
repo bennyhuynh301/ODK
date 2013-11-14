@@ -23,7 +23,7 @@ import android.net.wifi.WifiManager;
 import android.util.Log;
 
 public class Utils {
-	public static final String EC2_URL="http://184.169.166.200:61245/"; // must have the slash at the end
+	public static final String EC2_URL="http://TQS-LB-317129516.us-west-1.elb.amazonaws.com:61245/"; // must have the slash at the end
 	public static final String TAG = "Utils";
 	public static final int NO_CONNECTION = 0;
 	public static final int WAIT_FOR_WIFI = 1;

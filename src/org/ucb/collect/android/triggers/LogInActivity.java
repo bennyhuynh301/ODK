@@ -161,7 +161,7 @@ public class LogInActivity extends Activity implements OnClickListener {
 		            return key.equals("user") && value.equals("true");	
 		        }
 			} catch (Exception e) {
-				throw new Exception("Server is unavailable. Please try again later!");
+				throw new Exception("Could not connect to server. Are you connected to the Internet? If this error persists, try logging in with only the mobile data connection on (Wifi temporarily off).");
 			}
 			finally {
 				if (urlConnection != null)

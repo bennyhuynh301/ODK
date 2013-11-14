@@ -74,7 +74,7 @@ public class MotionService extends Service implements SensorEventListener {
 			time = event.timestamp;
 			long current = System.currentTimeMillis();
 			if (current - lastUpdate > 2) {
-				logMotionResults(time,x,y,z);
+				logMotionResults(time,current,x,y,z);
 			}
 			lastUpdate = current;
 		}
@@ -85,9 +85,10 @@ public class MotionService extends Service implements SensorEventListener {
 		return null;
 	}
 	
-	private void logMotionResults(long time, float x, float y, float z) {
+	private void logMotionResults(long time, long current, float x, float y, float z) {
 		StringBuilder sb = new StringBuilder("{\"accel\":{");
 		sb.append("\"time\":").append(time).append(",");
+		sb.append("\"systime\":").append(current).append(",");
 		sb.append("\"x\":").append(x).append(",");
 		sb.append("\"y\":").append(y).append(",");
 		sb.append("\"z\":").append(z);

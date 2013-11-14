@@ -9,9 +9,11 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -29,7 +31,9 @@ public class WiFiBroadcastReceiver extends BroadcastReceiver {
 		int wifiState = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_UNKNOWN);
 		Log.d(TAG, "Wifi state: " + wifiState);
 		Utils.log(new Date(), TAG, "Wifi state: " + wifiState);
-		if (wifiState == WifiManager.WIFI_STATE_DISABLED) {
+		SharedPreferences myPref = PreferenceManager.getDefaultSharedPreferences(context);
+		boolean needNotification = myPref.getBoolean("notification_preference", true);
+		if (needNotification && wifiState == WifiManager.WIFI_STATE_DISABLED) {
 			sendWiFiNotification();
 		}
 	}

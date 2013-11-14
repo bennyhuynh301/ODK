@@ -38,7 +38,7 @@ import android.util.Log;
 
 public class TripRequestService extends Service {
 	private static final String TAG = "TripRequestService";
-	private static final String SERVER_URL= "http://184.169.166.200:61245/api/trips";
+	private static final String SERVER_URL= "http://TQS-LB-317129516.us-west-1.elb.amazonaws.com:61245/api/trips";
 	private static final String GOOGLE_URL= "http://maps.googleapis.com/maps/api/directions/json";
 
 	private PowerManager.WakeLock wakeLock;

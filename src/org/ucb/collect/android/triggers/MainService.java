@@ -40,7 +40,7 @@ public class MainService extends Service {
 			pTimeTrigger = PendingIntent.getBroadcast(this, 0, timeTrigger, PendingIntent.FLAG_UPDATE_CURRENT);
 			cron.setRepeating(AlarmManager.RTC_WAKEUP, 
 					calendar.getTimeInMillis(),
-					AlarmManager.INTERVAL_FIFTEEN_MINUTES, 
+					AlarmManager.INTERVAL_FIFTEEN_MINUTES,
 					pTimeTrigger);
 
 			//Schedule download task
@@ -72,7 +72,7 @@ public class MainService extends Service {
 			pTimeTrigger = PendingIntent.getBroadcast(this, 0, timeTrigger, PendingIntent.FLAG_UPDATE_CURRENT);
 			cron.setRepeating(AlarmManager.RTC_WAKEUP, 
 					calendar.getTimeInMillis(),
-					AlarmManager.INTERVAL_DAY, 
+					AlarmManager.INTERVAL_HALF_DAY,
 					pTimeTrigger);
 
 			//Schedule download task
@@ -80,7 +80,7 @@ public class MainService extends Service {
 			pDownloadRequest = PendingIntent.getBroadcast(this, 0, downloadRequest, PendingIntent.FLAG_UPDATE_CURRENT);
 			cron.setRepeating(AlarmManager.RTC_WAKEUP,
 					calendar.getTimeInMillis(),
-					AlarmManager.INTERVAL_DAY,
+					AlarmManager.INTERVAL_HALF_DAY,
 					pDownloadRequest);
 		}
 	}

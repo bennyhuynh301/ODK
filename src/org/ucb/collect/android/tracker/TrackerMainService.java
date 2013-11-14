@@ -30,7 +30,7 @@ public class TrackerMainService extends Service {
 	private final int random60Min = (int) (Math.random()*60);
 	private final int randomSecond = (int) (Math.random()*60);
 	
-	private final int triggerHour = (int) (Math.random()*17 + 6);
+	private final int triggerHour = (int) (Math.random()*23); //(int) (Math.random()*18 + 5)
 	
 	private AlarmManager am;
 	private PendingIntent uploadSender;
@@ -66,10 +66,11 @@ public class TrackerMainService extends Service {
 			uploadIntent.putExtra("RESP", "UPLOAD");
 			uploadSender = PendingIntent.getBroadcast(this,(int) System.currentTimeMillis(),uploadIntent,PendingIntent.FLAG_UPDATE_CURRENT);
 			am.setRepeating(AlarmManager.RTC_WAKEUP, onUploadTime.getTimeInMillis(), AlarmManager.INTERVAL_HALF_HOUR, uploadSender);
+			
 			Log.d(TAG, "Trigger Request Trip Time: " + onUploadTime.getTime());
 			Intent requestTripIntent = new Intent(this, RequestTripsReceiver.class);
 			requestTripSender = PendingIntent.getBroadcast(this,(int) System.currentTimeMillis(), requestTripIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-			am.setRepeating(AlarmManager.RTC_WAKEUP, onUploadTime.getTimeInMillis()+60000, AlarmManager.INTERVAL_HALF_HOUR,requestTripSender);
+			am.setRepeating(AlarmManager.RTC_WAKEUP, onUploadTime.getTimeInMillis()+60000, AlarmManager.INTERVAL_FIFTEEN_MINUTES,requestTripSender);
 		}
 		else {
 			Calendar onUploadTime = Calendar.getInstance();
@@ -88,7 +89,7 @@ public class TrackerMainService extends Service {
 			Intent uploadIntent = new Intent(this, UploadReceiver.class);
 			uploadIntent.putExtra("RESP", "UPLOAD");
 			uploadSender = PendingIntent.getBroadcast(this,(int) System.currentTimeMillis(),uploadIntent,PendingIntent.FLAG_UPDATE_CURRENT);
-			am.setRepeating(AlarmManager.RTC_WAKEUP, onUploadTime.getTimeInMillis(), AlarmManager.INTERVAL_DAY, uploadSender);
+			am.setRepeating(AlarmManager.RTC_WAKEUP, onUploadTime.getTimeInMillis(), AlarmManager.INTERVAL_HALF_DAY, uploadSender);
 			
 			
 			Calendar triggerTime = Calendar.getInstance();
