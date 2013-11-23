@@ -1,26 +1,5 @@
 package org.ucb.collect.android.tracker;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Set;
-
-import net.lingala.zip4j.core.ZipFile;
-import net.lingala.zip4j.model.ZipParameters;
-import net.lingala.zip4j.util.Zip4jConstants;
-
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicHttpResponse;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -34,6 +13,22 @@ import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.model.ZipParameters;
+import net.lingala.zip4j.util.Zip4jConstants;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHttpResponse;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.util.*;
 
 
 public class TripRequestService extends Service {
@@ -192,9 +187,13 @@ public class TripRequestService extends Service {
 						url.append("?origin=").append(origin);
 						url.append("&destination=").append(destination);
 						url.append("&sensor=false");
-						url.append("&departure_time=").append(departTime);
+
+                        //by Hoang
+						url.append("&departure_time=").append(getFutureDate(Long.valueOf(departTime)*1000).getTimeInMillis()/1000);
+
 						url.append("&mode=").append(mode);
 						url.append("&alternatives=true");
+
 						TripModel tm = new TripModel(k, mode, url.toString());
 						arr.add(tm);
 					}
@@ -205,6 +204,26 @@ public class TripRequestService extends Service {
 			}
 			return null;
 		}
+
+        /**
+         * by Hoang. I.e. Input timestamp is Monday in the past and output is the next Monday of now.
+         * @param t in millis
+         * @return date of next week of current time
+         */
+        GregorianCalendar today = new GregorianCalendar();
+        public GregorianCalendar getFutureDate(long t){
+            today.setTime(new Date());
+
+            GregorianCalendar g = new GregorianCalendar();
+            g.setTime(new Date(t));
+
+            if (g.after(today)){
+                return g;
+            }
+
+            g.add(Calendar.DAY_OF_YEAR,7);
+            return getFutureDate(g.getTimeInMillis());
+        }
 
 		private String sendTripRequestToGoogleApi(ArrayList<TripModel> arr) {
 			ArrayList<File> files = new ArrayList<File>();

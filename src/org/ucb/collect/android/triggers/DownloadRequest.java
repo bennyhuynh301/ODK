@@ -1,7 +1,5 @@
 package org.ucb.collect.android.triggers;
 
-import java.util.Date;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +7,8 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 import android.util.Log;
+
+import java.util.Date;
 
 public class DownloadRequest extends BroadcastReceiver {
 	private boolean DEBUG = false;

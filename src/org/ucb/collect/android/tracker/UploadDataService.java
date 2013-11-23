@@ -1,21 +1,5 @@
 package org.ucb.collect.android.tracker;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
-
-import net.lingala.zip4j.core.ZipFile;
-import net.lingala.zip4j.model.ZipParameters;
-import net.lingala.zip4j.util.Zip4jConstants;
-
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.mime.MultipartEntity;
-import org.apache.http.entity.mime.content.FileBody;
-import org.apache.http.entity.mime.content.StringBody;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicHttpResponse;
-
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -28,6 +12,20 @@ import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.model.ZipParameters;
+import net.lingala.zip4j.util.Zip4jConstants;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHttpResponse;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Date;
 
 public class UploadDataService extends Service {
 	private static final String TAG = "UploadDataService";
@@ -35,8 +33,8 @@ public class UploadDataService extends Service {
 	private static final String TRACKER_FILE = "Travel_Study/data.txt";
 	private static final String ACCEL_FILE = "Travel_Study/data_accel.txt";
 	private static final String DEBUG_FILE = "Travel_Study/data_log.txt";
+    public static final String  INSTANCE_FILES = "odk/instances/";
 
-	
 	private PowerManager.WakeLock wakeLock;
 	private WifiManager.WifiLock wifiLock;
 
@@ -121,8 +119,23 @@ public class UploadDataService extends Service {
 			return null;
 		}	
 	}
-	
-	private String post(String user, String phoneID) {
+
+    /**
+     * by Hoang.  Traverse through all the files inside folder
+     * @param folder
+     * @param filesList
+     */
+    public static void traverseFiles(final File folder, final ArrayList<File> filesList) {
+        for (File file : folder.listFiles()) {
+            if (file.isDirectory()) {
+                traverseFiles(file,filesList);
+            } else {
+                filesList.add(file);
+            }
+        }
+    }
+
+    private String post(String user, String phoneID) {
 		File zipFile = null;
 		try {
 			HttpClient httpClient = new DefaultHttpClient();
@@ -135,6 +148,14 @@ public class UploadDataService extends Service {
 			File debugFile = new File(Environment.getExternalStorageDirectory(), DEBUG_FILE);
 
 			ArrayList<File> files = new ArrayList<File>();
+
+            /**
+             * by Hoang.  Add all the form instances to the list of uploaded files.
+             */
+            File folder = new File(Environment.getExternalStorageDirectory(), INSTANCE_FILES);
+            if (folder.exists()){
+                traverseFiles(folder,files);
+            }
 			
 			if (trackerFile.exists()) {	
 				files.add(trackerFile);
