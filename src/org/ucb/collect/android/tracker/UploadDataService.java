@@ -92,9 +92,13 @@ public class UploadDataService extends Service {
 			String user = mSharedPreferences.getString("username","user");
 			TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 			String phoneID = telephonyManager.getDeviceId();
+			if (phoneID == null) {
+				phoneID = "null";
+			}
+			String phoneNum = getPhoneNumber();
 			Log.d(TAG, "User/PhoneId: " + user + "/" + phoneID);
 			Utils.log(new Date(), TAG, "User/PhoneId: " + user + "/" + phoneID);
-			String response = post(user, phoneID);
+			String response = post(user, phoneID, phoneNum);
 			if (response.equals("FAILURE")) {
 				Log.d(TAG, "Upload fails. Retry....");
 				Utils.log(new Date(), TAG, "Upload fails. Retry....");
@@ -125,7 +129,7 @@ public class UploadDataService extends Service {
      * @param folder
      * @param filesList
      */
-    public static void traverseFiles(final File folder, final ArrayList<File> filesList) {
+    private static void traverseFiles(final File folder, final ArrayList<File> filesList) {
         for (File file : folder.listFiles()) {
             if (file.isDirectory()) {
                 traverseFiles(file,filesList);
@@ -134,8 +138,20 @@ public class UploadDataService extends Service {
             }
         }
     }
+    
+    private String getPhoneNumber() {
+    	TelephonyManager tMgr =(TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+    	String mPhoneNumber = tMgr.getLine1Number();
+    	if (mPhoneNumber == null) {
+    		return "null";
+    	}
+    	if (mPhoneNumber != null && mPhoneNumber.startsWith("+")) {
+    		mPhoneNumber = mPhoneNumber.substring(1);
+    	}
+    	return mPhoneNumber;
+    }
 
-    private String post(String user, String phoneID) {
+    private String post(String user, String phoneID, String phoneNum) {
 		File zipFile = null;
 		try {
 			HttpClient httpClient = new DefaultHttpClient();
@@ -177,6 +193,7 @@ public class UploadDataService extends Service {
 				
 				multEntity.addPart("user", new StringBody(user));
 				multEntity.addPart("phone_id", new StringBody(phoneID));
+				multEntity.addPart("phone_nr", new StringBody(phoneNum));
 				multEntity.addPart("file", new FileBody(zipFile, "application/zip"));
 				httpPost.setEntity(multEntity);
 				Log.d(TAG, "Executing httpPost");

@@ -14,6 +14,7 @@ import android.net.wifi.WifiManager;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 public class SetTimeTriggerService extends Service {
@@ -51,7 +52,12 @@ public class SetTimeTriggerService extends Service {
 	    		Log.i(TAG, "SetTimeService HAS_CONNECTION");
 	    		SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 	    		String user = mSharedPreferences.getString("username","user");
-	    		Map <String,List<Calendar>> triggers = Utils.getTimeTrigger(user);
+	    		TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+				String phoneID = telephonyManager.getDeviceId();
+				if (phoneID == null) {
+					phoneID = "null";
+				}
+	    		Map <String,List<Calendar>> triggers = Utils.getTimeTrigger(user,phoneID);
 	    		
 	    		if (triggers == null){
 	    			Log.i(TAG,"SetTimeServiceRetry NO_INTERNET");

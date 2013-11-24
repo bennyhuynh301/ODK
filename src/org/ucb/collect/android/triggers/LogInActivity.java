@@ -20,6 +20,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -141,7 +142,12 @@ public class LogInActivity extends Activity implements OnClickListener {
 			}
 			HttpURLConnection urlConnection = null;
 			try {
-				URL url = new URL(Utils.EC2_URL+"api/user?u="+user);
+				TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+				String phoneID = telephonyManager.getDeviceId();
+				if (phoneID == null) {
+					phoneID = "null";
+				}
+				URL url = new URL(Utils.EC2_URL+"api/user?u="+user+"&phone_id"+phoneID);
 				urlConnection = (HttpURLConnection) url.openConnection();
 				urlConnection.setConnectTimeout(5000);
 				urlConnection.setReadTimeout(5000);

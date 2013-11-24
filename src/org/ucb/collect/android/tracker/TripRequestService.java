@@ -33,7 +33,7 @@ import java.util.*;
 
 public class TripRequestService extends Service {
 	private static final String TAG = "TripRequestService";
-	private static final String SERVER_URL= "http://TQS-LB-317129516.us-west-1.elb.amazonaws.com:61245/api/trips";
+	private static final String SERVER_URL= "http://TQS-LB-317129516.us-west-1.elb.amazonaws.com:61245/api/mqtrips";
 	private static final String GOOGLE_URL= "http://maps.googleapis.com/maps/api/directions/json";
 
 	private PowerManager.WakeLock wakeLock;
@@ -100,6 +100,9 @@ public class TripRequestService extends Service {
 			Context context = getApplicationContext();
 			TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 			String phoneID = telephonyManager.getDeviceId();
+			if (phoneID == null) {
+				phoneID = "null";
+			}
 			Log.d(TAG, "PhoneId: " + phoneID);
 			Utils.log(new Date(), TAG, "PhoneId: " + phoneID);
 			String jsonContent = requestTrips(phoneID);

@@ -238,16 +238,13 @@
         </service>
 
         <receiver
-            android:name="org.ucb.collect.android.tracker.UpdateReceiver"
-            android:process=":remote" >
+            android:name="org.ucb.collect.android.tracker.UpdateReceiver">
         </receiver>
         <receiver
-            android:name="org.ucb.collect.android.tracker.UploadReceiver"
-            android:process=":remote" >
+            android:name="org.ucb.collect.android.tracker.UploadReceiver">
         </receiver>
         <receiver
-            android:name="org.ucb.collect.android.tracker.SetTimeTrigger"
-            android:process=":remote" >
+            android:name="org.ucb.collect.android.tracker.SetTimeTrigger" >
         </receiver>
         <receiver android:name="org.ucb.collect.android.tracker.BatteryLevelReceiver" >
             <intent-filter>
@@ -275,16 +272,13 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name="org.ucb.collect.android.tracker.MotionTrackerStopReceiver"
-            android:process=":remote" >
+            android:name="org.ucb.collect.android.tracker.MotionTrackerStopReceiver">
         </receiver>
         <receiver
-            android:name="org.ucb.collect.android.tracker.PostTripReceiver"
-            android:process=":remote" >
+            android:name="org.ucb.collect.android.tracker.PostTripReceiver" >
         </receiver>
         <receiver
-            android:name="org.ucb.collect.android.tracker.RequestTripsReceiver"
-            android:process=":remote" >
+            android:name="org.ucb.collect.android.tracker.RequestTripsReceiver" >
         </receiver>
         
         <activity

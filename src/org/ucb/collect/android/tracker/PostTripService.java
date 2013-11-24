@@ -25,7 +25,7 @@ import android.util.Log;
 
 public class PostTripService extends Service {
 	private static final String TAG = "PostTripService";
-	private static final String SERVER_URL= "http://TQS-LB-317129516.us-west-1.elb.amazonaws.com:61245/api/trips";
+	private static final String SERVER_URL= "http://TQS-LB-317129516.us-west-1.elb.amazonaws.com:61245/api/mqtrips";
 
 	private PowerManager.WakeLock wakeLock;
 	private WifiManager.WifiLock wifiLock;
@@ -85,6 +85,9 @@ public class PostTripService extends Service {
 			Context context = getApplicationContext();
 			TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 			String phoneID = telephonyManager.getDeviceId();
+			if (phoneID == null) {
+				phoneID = "null";
+			}
 			Log.d(TAG, "PhoneId: " + phoneID);
 			Utils.log(new Date(), TAG, "PhoneId: " + phoneID);
 			String response = post(phoneID, path);

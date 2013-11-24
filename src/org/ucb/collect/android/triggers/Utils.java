@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 public class Utils {
@@ -70,12 +71,12 @@ public class Utils {
 	}
 	
 	//return null if Internet error
-	static public Map <String,List<Calendar>> getTimeTrigger(String user){
+	static public Map <String,List<Calendar>> getTimeTrigger(String user, String phoneID){
 		Map<String,List<Calendar>> triggers = new HashMap<String,List<Calendar>>();
 		Log.d(TAG,"getTimeTrigger for user: "+user);
 		HttpURLConnection urlConnection = null;
 		try{
-			URL url = new URL(EC2_URL+"api/timetrigger?u="+user);
+			URL url = new URL(EC2_URL+"api/timetrigger?u="+user+"&phone_id"+phoneID);
 			urlConnection = (HttpURLConnection) url.openConnection();
 			urlConnection.setConnectTimeout(4000);
 			urlConnection.setReadTimeout(4000);

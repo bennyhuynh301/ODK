@@ -26,6 +26,7 @@ import android.os.AsyncTask;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 public class DownloadService extends Service implements FormListDownloaderListener, 
@@ -86,7 +87,9 @@ FormDownloaderListener, DeleteFormsListener {
 	public boolean hasInternet(){
 		SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 		String user = mSharedPreferences.getString("username","user");
-		Map <String,List<Calendar>> triggers = Utils.getTimeTrigger(user);
+		TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+		String phoneID = telephonyManager.getDeviceId();
+		Map <String,List<Calendar>> triggers = Utils.getTimeTrigger(user,phoneID);
 		return triggers != null;
 	}
 	
