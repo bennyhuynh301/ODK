@@ -100,7 +100,7 @@ public class TrackerMainService extends Service {
 			Utils.log(new Date(), TAG, "Trigger Request Trip Time: " + triggerTime.getTime());
 			Intent requestTripIntent = new Intent(this, RequestTripsReceiver.class);
 			requestTripSender = PendingIntent.getBroadcast(this,(int) System.currentTimeMillis(), requestTripIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-			am.setRepeating(AlarmManager.RTC_WAKEUP, triggerTime.getTimeInMillis(), AlarmManager.INTERVAL_DAY,requestTripSender);
+			am.setRepeating(AlarmManager.RTC_WAKEUP, triggerTime.getTimeInMillis(), AlarmManager.INTERVAL_HALF_DAY,requestTripSender);
 		}
 	}
 
